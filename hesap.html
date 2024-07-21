@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borç Takip Uygulaması</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+        nav {
+            background-color: #2980b9;
+            padding: 0.5rem;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        .feature-box {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .screenshot {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        footer {
+            background: #34495e;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Borç Takip Uygulaması</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#features">Özellikler</a></li>
+            <li><a href="#screenshots">Ekran Görüntüleri</a></li>
+            <li><a href="#download">İndir</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="features">
+            <h2>Özellikler</h2>
+            <div class="feature-box">
+                <h3>Borç Ekleme ve Görüntüleme</h3>
+                <p>Kolayca borç ekleyin ve mevcut borçlarınızı görüntüleyin.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Kişi Seçimi</h3>
+                <p>Rehberinizden kişi seçerek hızlıca borç kaydı oluşturun.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Detaylı Borç Bilgileri</h3>
+                <p>Her borç için ayrıntılı bilgileri kaydedin ve görüntüleyin.</p>
+            </div>
+        </section>
+        <section id="screenshots">
+            <h2>Ekran Görüntüleri</h2>
+            <img src="image1.jpg" alt="Borç Ekleme" class="screenshot">
+            <img src="image2.jpg" alt="Kişi Seçimi" class="screenshot">
+            <img src="image3.jpg" alt="Borç Detayları" class="screenshot">
+            <img src="image4.jpg" alt="Borçlu Kişi ve Ürünler" class="screenshot">
+            <img src="image5.jpg" alt="Borç Detayları Görüntüleme" class="screenshot">
+        </section>
+        <section id="download">
+            <h2>Hemen İndirin</h2>
+            <a href="#" class="btn">App Store'dan İndir</a>
+        </section>
+    </div>
+    <footer>
+        <p>İletişim: example@email.com | Tel: 555-123-4567</p>
+    </footer>
+    <script>
+        // Basit bir smooth scroll fonksiyonu
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
