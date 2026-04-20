@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fatih için Beslenme Planı — 12 Haftalık Yol Haritası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #f5efe4;
+    --cream-deep: #ede4d3;
+    --olive: #3e5339;
+    --olive-deep: #2a3a26;
+    --terra: #b5613f;
+    --terra-deep: #8f4a2e;
+    --ink: #1f221c;
+    --ink-soft: #4a4d45;
+    --paper: #fbf7ee;
+    --rule: #d9cfb8;
+    --gold: #c49a3f;
+    --red: #9c3b2a;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{
+    font-family:'Manrope',system-ui,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.6;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* --- Subtle grain texture --- */
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:
+      radial-gradient(circle at 20% 30%,rgba(181,97,63,0.04) 0,transparent 40%),
+      radial-gradient(circle at 80% 70%,rgba(62,83,57,0.05) 0,transparent 50%);
+    pointer-events:none;z-index:0;
+  }
+
+  /* --- Top nav --- */
+  nav.top{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,239,228,0.92);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--rule);
+  }
+  nav.top .inner{
+    max-width:1200px;margin:0 auto;padding:14px 32px;
+    display:flex;justify-content:space-between;align-items:center;gap:20px;
+  }
+  nav.top .brand{
+    font-family:'Fraunces',serif;font-weight:500;font-size:18px;
+    letter-spacing:-0.01em;
+  }
+  nav.top .brand em{font-style:italic;color:var(--terra);font-weight:400}
+  nav.top ul{
+    display:flex;list-style:none;gap:28px;flex-wrap:wrap;
+  }
+  nav.top a{
+    color:var(--ink-soft);text-decoration:none;font-size:13px;
+    font-weight:500;letter-spacing:0.02em;
+    text-transform:uppercase;transition:color 0.2s;
+  }
+  nav.top a:hover{color:var(--terra)}
+
+  main{max-width:1200px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+  /* --- Hero --- */
+  .hero{
+    padding:80px 0 60px;
+    border-bottom:1px solid var(--rule);
+    display:grid;grid-template-columns:1.4fr 1fr;gap:60px;
+    align-items:end;
+  }
+  .hero .tag{
+    display:inline-block;padding:6px 14px;
+    background:var(--olive);color:var(--paper);
+    font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+    font-weight:600;margin-bottom:24px;
+  }
+  .hero h1{
+    font-family:'Fraunces',serif;
+    font-weight:400;font-size:clamp(42px,6vw,82px);
+    line-height:0.95;letter-spacing:-0.025em;
+    color:var(--olive-deep);
+  }
+  .hero h1 em{
+    font-style:italic;font-weight:300;color:var(--terra);
+  }
+  .hero .sub{
+    margin-top:20px;font-size:17px;color:var(--ink-soft);
+    max-width:520px;
+  }
+  .stats{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:20px;
+    padding:28px;
+    background:var(--paper);
+    border:1px solid var(--rule);
+  }
+  .stat .k{
+    font-family:'Fraunces',serif;
+    font-size:34px;font-weight:500;color:var(--olive-deep);
+    letter-spacing:-0.02em;line-height:1;
+  }
+  .stat .k small{font-size:14px;color:var(--ink-soft);font-weight:400}
+  .stat .l{
+    font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--ink-soft);margin-top:6px;font-weight:500;
+  }
+
+  @media(max-width:820px){
+    .hero{grid-template-columns:1fr;gap:36px;padding:48px 0 40px}
+    nav.top ul{display:none}
+  }
+
+  /* --- Section headers --- */
+  section{padding:80px 0;border-bottom:1px solid var(--rule)}
+  .sec-label{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:18px;
+  }
+  .sec-label .num{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+    font-size:14px;color:var(--terra);
+  }
+  .sec-label .line{flex:1;height:1px;background:var(--rule);max-width:80px}
+  .sec-label .name{
+    font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+    font-weight:600;color:var(--ink-soft);
+  }
+  h2{
+    font-family:'Fraunces',serif;font-weight:400;
+    font-size:clamp(32px,4.5vw,52px);
+    line-height:1.05;letter-spacing:-0.02em;
+    color:var(--olive-deep);margin-bottom:18px;max-width:800px;
+  }
+  h2 em{font-style:italic;color:var(--terra);font-weight:300}
+  .lede{
+    font-size:18px;color:var(--ink-soft);max-width:720px;
+    margin-bottom:48px;
+  }
+
+  /* --- Principles --- */
+  .principles{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;
+    background:var(--rule);
+    border:1px solid var(--rule);
+  }
+  .principle{
+    background:var(--paper);padding:32px 28px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .principle .badge{
+    width:36px;height:36px;display:grid;place-items:center;
+    background:var(--olive);color:var(--paper);
+    font-family:'Fraunces',serif;font-size:16px;font-weight:500;
+    border-radius:50%;
+  }
+  .principle h3{
+    font-family:'Fraunces',serif;font-weight:500;
+    font-size:20px;color:var(--olive-deep);line-height:1.2;
+  }
+  .principle p{font-size:14.5px;color:var(--ink-soft)}
+  .principle.accent .badge{background:var(--terra)}
+
+  /* --- Weekly menu table --- */
+  .days{
+    display:grid;grid-template-columns:repeat(7,1fr);
+    gap:1px;background:var(--rule);
+    border:1px solid var(--rule);margin-bottom:40px;
+  }
+  .day{
+    background:var(--paper);padding:0;min-height:600px;
+    display:flex;flex-direction:column;
+  }
+  .day-head{
+    padding:14px 12px;
+    background:var(--olive);color:var(--paper);
+    text-align:center;
+  }
+  .day-head .dn{
+    font-family:'Fraunces',serif;font-style:italic;font-size:17px;
+    font-weight:400;
+  }
+  .day-head .dnum{font-size:10px;letter-spacing:0.1em;opacity:0.75;margin-top:2px}
+  .day.accent .day-head{background:var(--terra)}
+  .meal{
+    padding:12px 14px;border-bottom:1px solid var(--rule);flex:1;
+  }
+  .meal:last-child{border-bottom:none}
+  .meal .mlabel{
+    font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--terra);font-weight:600;margin-bottom:6px;
+  }
+  .meal .mtxt{
+    font-size:13px;line-height:1.45;color:var(--ink);
+  }
+  .meal .mkcal{
+    font-size:11px;color:var(--ink-soft);margin-top:6px;
+    font-family:'Fraunces',serif;font-style:italic;
+  }
+  @media(max-width:1100px){
+    .days{grid-template-columns:repeat(2,1fr)}
+    .day{min-height:auto}
+  }
+  @media(max-width:560px){
+    .days{grid-template-columns:1fr}
+  }
+
+  /* --- Daily template --- */
+  .daily{
+    display:grid;grid-template-columns:1fr 1fr;gap:40px;
+  }
+  .timeline{position:relative;padding-left:32px}
+  .timeline::before{
+    content:'';position:absolute;left:8px;top:12px;bottom:12px;
+    width:1px;background:var(--rule);
+  }
+  .tl-item{position:relative;padding-bottom:28px}
+  .tl-item::before{
+    content:'';position:absolute;left:-28px;top:8px;
+    width:15px;height:15px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--olive);
+  }
+  .tl-item.accent::before{border-color:var(--terra)}
+  .tl-time{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+    font-size:14px;color:var(--terra);margin-bottom:4px;
+  }
+  .tl-title{
+    font-family:'Fraunces',serif;font-weight:500;font-size:21px;
+    color:var(--olive-deep);margin-bottom:6px;
+  }
+  .tl-desc{font-size:14px;color:var(--ink-soft)}
+
+  .daily-aside{
+    background:var(--paper);padding:36px 32px;
+    border:1px solid var(--rule);align-self:start;position:sticky;top:100px;
+  }
+  .daily-aside h4{
+    font-family:'Fraunces',serif;font-weight:500;font-size:22px;
+    color:var(--olive-deep);margin-bottom:18px;
+  }
+  .macro-row{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:10px 0;border-bottom:1px dashed var(--rule);
+  }
+  .macro-row:last-child{border-bottom:none}
+  .macro-row .mn{font-size:14px;color:var(--ink-soft);font-weight:500}
+  .macro-row .mv{
+    font-family:'Fraunces',serif;font-size:18px;font-weight:500;
+    color:var(--olive-deep);
+  }
+  .do-dont{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+  .do, .dont{
+    padding:16px;font-size:13px;
+  }
+  .do{background:rgba(62,83,57,0.08);border-left:3px solid var(--olive)}
+  .dont{background:rgba(156,59,42,0.06);border-left:3px solid var(--red)}
+  .do h5, .dont h5{
+    font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    font-weight:700;margin-bottom:8px;
+  }
+  .do h5{color:var(--olive)}
+  .dont h5{color:var(--red)}
+  .do ul, .dont ul{list-style:none;padding:0}
+  .do li, .dont li{padding:3px 0;color:var(--ink-soft)}
+
+  @media(max-width:900px){
+    .daily{grid-template-columns:1fr}
+    .daily-aside{position:static}
+  }
+
+  /* --- Recipes --- */
+  .recipes{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:2px;background:var(--rule);border:1px solid var(--rule)}
+  .recipe{background:var(--paper);padding:36px 32px;display:flex;flex-direction:column}
+  .recipe .rnum{
+    font-family:'Fraunces',serif;font-style:italic;font-size:13px;
+    color:var(--terra);margin-bottom:8px;
+  }
+  .recipe h3{
+    font-family:'Fraunces',serif;font-weight:500;font-size:28px;
+    line-height:1.1;color:var(--olive-deep);margin-bottom:10px;
+    letter-spacing:-0.01em;
+  }
+  .recipe .rmeta{
+    display:flex;gap:14px;font-size:12px;color:var(--ink-soft);
+    padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--rule);
+  }
+  .recipe .rmeta span{
+    display:flex;align-items:center;gap:5px;
+  }
+  .recipe .rmeta strong{color:var(--olive-deep);font-weight:600}
+  .recipe .rtag{
+    display:inline-block;padding:3px 10px;background:var(--olive);
+    color:var(--paper);font-size:10px;letter-spacing:0.08em;
+    text-transform:uppercase;font-weight:600;margin-bottom:14px;align-self:flex-start;
+  }
+  .recipe .rtag.liver{background:var(--terra)}
+  .recipe .rtag.omega{background:#2d5a7a}
+  .recipe h4{
+    font-family:'Fraunces',serif;font-weight:500;font-size:15px;
+    color:var(--olive-deep);margin:18px 0 10px;
+    text-transform:uppercase;letter-spacing:0.08em;
+  }
+  .recipe ul.malz{list-style:none;padding:0;margin-bottom:8px}
+  .recipe ul.malz li{
+    padding:6px 0;border-bottom:1px dotted var(--rule);
+    font-size:14px;display:flex;justify-content:space-between;gap:12px;
+  }
+  .recipe ul.malz li:last-child{border-bottom:none}
+  .recipe ul.malz li .nm{color:var(--ink)}
+  .recipe ul.malz li .amt{color:var(--ink-soft);font-weight:500;white-space:nowrap}
+  .recipe ol.steps{padding-left:22px;counter-reset:stp}
+  .recipe ol.steps li{
+    list-style:none;position:relative;padding:6px 0 6px 0;
+    font-size:14px;color:var(--ink-soft);counter-increment:stp;
+  }
+  .recipe ol.steps li::before{
+    content:counter(stp)".";position:absolute;left:-22px;
+    font-family:'Fraunces',serif;font-style:italic;color:var(--terra);
+    font-weight:500;
+  }
+
+  /* --- Shopping list --- */
+  .shop{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;
+  }
+  .shop-col{
+    background:var(--paper);padding:28px 26px;border:1px solid var(--rule);
+  }
+  .shop-col h4{
+    font-family:'Fraunces',serif;font-weight:500;font-size:22px;
+    color:var(--olive-deep);margin-bottom:4px;
+  }
+  .shop-col .hint{
+    font-size:12px;color:var(--terra);margin-bottom:16px;
+    font-style:italic;
+  }
+  .shop-col ul{list-style:none}
+  .shop-col ul li{
+    padding:7px 0;border-bottom:1px dotted var(--rule);
+    font-size:13.5px;color:var(--ink-soft);
+  }
+  .shop-col ul li:last-child{border-bottom:none}
+  .shop-col ul li::before{
+    content:'□  ';color:var(--rule);font-weight:bold;
+  }
+
+  /* --- Monthly roadmap --- */
+  .roadmap{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+    background:var(--rule);border:1px solid var(--rule);
+  }
+  .month-card{
+    background:var(--paper);padding:32px 28px;
+    position:relative;
+  }
+  .month-card .mlab{
+    font-family:'Fraunces',serif;font-style:italic;color:var(--terra);
+    font-size:14px;
+  }
+  .month-card h3{
+    font-family:'Fraunces',serif;font-weight:500;font-size:32px;
+    color:var(--olive-deep);margin-top:2px;line-height:1;
+    letter-spacing:-0.02em;
+  }
+  .month-card .mgoal{
+    font-size:13px;color:var(--terra-deep);font-weight:600;
+    padding:10px 0;margin:14px 0;border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);letter-spacing:0.02em;
+  }
+  .month-card ul{list-style:none;padding:0}
+  .month-card ul li{
+    font-size:13.5px;color:var(--ink-soft);padding:5px 0;
+    padding-left:14px;position:relative;
+  }
+  .month-card ul li::before{
+    content:'→';position:absolute;left:0;color:var(--terra);font-weight:600;
+  }
+  .month-card.target{background:var(--olive);color:var(--paper)}
+  .month-card.target .mlab{color:rgba(245,239,228,0.7)}
+  .month-card.target h3{color:var(--paper)}
+  .month-card.target .mgoal{color:rgba(245,239,228,0.85);border-color:rgba(245,239,228,0.2)}
+  .month-card.target ul li{color:rgba(245,239,228,0.85)}
+  .month-card.target ul li::before{color:var(--gold)}
+
+  @media(max-width:900px){.roadmap{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:500px){.roadmap{grid-template-columns:1fr}}
+
+  /* --- Disclaimer --- */
+  .disclaim{
+    padding:48px 0 32px;
+    font-size:13px;color:var(--ink-soft);
+    font-style:italic;max-width:760px;
+    font-family:'Fraunces',serif;
+    border-top:1px solid var(--rule);
+  }
+  .disclaim strong{
+    font-style:normal;color:var(--terra-deep);
+    font-family:'Manrope',sans-serif;font-weight:600;
+    letter-spacing:0.04em;text-transform:uppercase;font-size:11px;
+    display:block;margin-bottom:8px;
+  }
+
+  footer{padding:40px 0 60px;text-align:center;color:var(--ink-soft);font-size:12px}
+
+  @media print{
+    nav.top{position:static}
+    body{background:white}
+    section{break-inside:avoid;page-break-inside:avoid;padding:30px 0}
+    .recipe{break-inside:avoid}
+    .day{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="inner">
+    <div class="brand">Fatih&nbsp;için <em>Beslenme&nbsp;Planı</em></div>
+    <ul>
+      <li><a href="#ilkeler">İlkeler</a></li>
+      <li><a href="#haftalik">Haftalık Menü</a></li>
+      <li><a href="#gunluk">Günlük</a></li>
+      <li><a href="#tarifler">Tarifler</a></li>
+      <li><a href="#market">Market</a></li>
+      <li><a href="#aylik">Aylık Plan</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <span class="tag">Kişiselleştirilmiş · 12 Haftalık Program</span>
+      <h1>Karaciğer dostu,<br><em>Akdeniz ruhunda</em><br>Türk sofrası.</h1>
+      <p class="sub">17.04.2026 tahlil sonuçlarına göre hazırlandı. Amaç: ALT'yi normalize etmek, HDL'yi yükseltmek, sağlıklı hızda kilo vermek — Türk mutfağından vazgeçmeden.</p>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="k">108<small> kg</small></div>
+        <div class="l">Başlangıç</div>
+      </div>
+      <div class="stat">
+        <div class="k">90<small> kg</small></div>
+        <div class="l">6 Aylık Hedef</div>
+      </div>
+      <div class="stat">
+        <div class="k">~2000<small> kcal</small></div>
+        <div class="l">Günlük Kalori</div>
+      </div>
+      <div class="stat">
+        <div class="k">~130<small> g</small></div>
+        <div class="l">Günlük Protein</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PRINCIPLES -->
+  <section id="ilkeler">
+    <div class="sec-label">
+      <span class="num">01</span><span class="line"></span>
+      <span class="name">Temel İlkeler</span>
+    </div>
+    <h2>Her şeyden önce: <em>neden</em> böyle yiyoruz?</h2>
+    <p class="lede">Tahlillerdeki üç ana hedef yüksek ALT (karaciğer), düşük HDL, yüksek LDL. Bu yedi ilke, diyetin omurgasını oluşturur — menüdeki her öğün bu ilkelere hizmet eder.</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="badge">1</div>
+        <h3>Beyaz un ve şeker minimum</h3>
+        <p>ALT 100'ün en büyük nedeni bu. Beyaz ekmek, pilav, makarna, tatlı, gazlı içecek, meyve suyu — hepsi karaciğer yağını artırır. Ekmek tam buğday, pilav bulgur.</p>
+      </div>
+      <div class="principle">
+        <div class="badge">2</div>
+        <h3>Haftada 2 kez yağlı balık</h3>
+        <p>Somon, hamsi, sardalya, uskumru. Omega-3 hem HDL'yi yükseltir hem karaciğer iltihabını azaltır. En güçlü tek gıda.</p>
+      </div>
+      <div class="principle accent">
+        <div class="badge">3</div>
+        <h3>Zeytinyağı ana yağ</h3>
+        <p>Ayçiçek, mısırözü, margarin ev dışına. Günde 3–4 yemek kaşığı sızma zeytinyağı. Kızartma yok — fırın, haşlama, ızgara, buğulama.</p>
+      </div>
+      <div class="principle">
+        <div class="badge">4</div>
+        <h3>Haftada 3 kez baklagil</h3>
+        <p>Mercimek, nohut, kuru fasulye, barbunya. Lifli, tok tutar, kan şekerini dengeler. Baklagillerin yemeği az yağlı pişer.</p>
+      </div>
+      <div class="principle">
+        <div class="badge">5</div>
+        <h3>Günde 4–5 ceviz</h3>
+        <p>Tek başına kalp-karaciğer sağlığının en çok desteklenen atıştırmalığı. Badem, fındık da olur ama ceviz önde. Kavrulmuş tuzlu değil.</p>
+      </div>
+      <div class="principle accent">
+        <div class="badge">6</div>
+        <h3>Kahve 2–3 fincan, alkol sıfır</h3>
+        <p>Filtre veya Türk kahvesi, şekersiz. NAFLD için koruyucu olduğu gösterilmiş. Alkol bu dönem tamamen dışarıda — karaciğerin toparlanması için şart.</p>
+      </div>
+      <div class="principle">
+        <div class="badge">7</div>
+        <h3>Günde 30 dakika tempolu yürüyüş</h3>
+        <p>Diyetin etkisini ikiye katlar, HDL'yi yükselten ikinci en güçlü araç. Masa başında her 45 dakikada bir 2 dakika ayakta olmak da sayılır.</p>
+      </div>
+      <div class="principle accent">
+        <div class="badge">8</div>
+        <h3>Sabırlı ol, tartıya günlük bakma</h3>
+        <p>Sürdürülebilir tempo haftada 400–600 gr. Ay sonunda 2.5 kg bile iyi bir ivmedir. Haftada bir, aynı gün, aynı koşullarda tart.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEEKLY MENU -->
+  <section id="haftalik">
+    <div class="sec-label">
+      <span class="num">02</span><span class="line"></span>
+      <span class="name">Haftalık Menü</span>
+    </div>
+    <h2>Yedi gün, <em>tekrar eden</em> bir ritim.</h2>
+    <p class="lede">Her gün ~2000 kcal, ~130 gr protein hedefli beş öğün. Eşin sabah bir kez planlayıp hazırlayabilsin diye öğünleri basit tuttum; kahvaltılar çoğunlukla 5 dakikada hazır.</p>
+
+    <div class="days">
+
+      <div class="day">
+        <div class="day-head"><div class="dn">Pazartesi</div><div class="dnum">Gün 01</div></div>
+        <div class="meal"><div class="mlabel">Kahvaltı</div><div class="mtxt">Yulaf lapası (40 gr yulaf, 200 ml süt, tarçın), üzerine 4 ceviz + yarım muz. Yeşil çay.</div><div class="mkcal">~450 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 elma + 10 badem</div><div class="mkcal">~180 kcal</div></div>
+        <div class="meal"><div class="mlabel">Öğle</div><div class="mtxt">Ezogelin çorbası (1 kase) + ızgara tavuk göğsü (150 gr) + bulgur pilavı (6 yk) + yeşil salata (zeytinyağlı)</div><div class="mkcal">~620 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">Yoğurt (200 gr) + 1 tatlı kaşığı keten tohumu</div><div class="mkcal">~140 kcal</div></div>
+        <div class="meal"><div class="mlabel">Akşam</div><div class="mtxt">Fırında baharatlı somon (150 gr) + közlenmiş sebze (kabak, biber, domates) + 1 dilim tam buğday</div><div class="mkcal">~580 kcal</div></div>
+      </div>
+
+      <div class="day accent">
+        <div class="day-head"><div class="dn">Salı</div><div class="dnum">Gün 02</div></div>
+        <div class="meal"><div class="mlabel">Kahvaltı</div><div class="mtxt">2 haşlanmış yumurta + beyaz peynir (40 gr) + 5 zeytin + domates, salatalık, maydanoz + 1 ince dilim tam buğday ekmek</div><div class="mkcal">~430 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 armut + 8 fındık</div><div class="mkcal">~170 kcal</div></div>
+        <div class="meal"><div class="mlabel">Öğle</div><div class="mtxt">Zeytinyağlı taze fasulye (1 porsiyon) + haşlanmış yumurta + 4 yk bulgur pilavı + ayran</div><div class="mkcal">~560 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 dilim tam buğday + 40 gr lor peyniri + domates</div><div class="mkcal">~180 kcal</div></div>
+        <div class="meal"><div class="mlabel">Akşam</div><div class="mtxt">Izgara dana köfte (120 gr, yağsız kıyma) + bulgur pilavı (5 yk) + çoban salata + 1 kase cacık</div><div class="mkcal">~640 kcal</div></div>
+      </div>
+
+      <div class="day">
+        <div class="day-head"><div class="dn">Çarşamba</div><div class="dnum">Gün 03</div></div>
+        <div class="meal"><div class="mlabel">Kahvaltı</div><div class="mtxt">Menemen (2 yumurta, 1 yk zeytinyağı, domates, biber) + 1 dilim tam buğday + 5 zeytin</div><div class="mkcal">~420 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 portakal + 1 tam ceviz (2 yarım)</div><div class="mkcal">~140 kcal</div></div>
+        <div class="meal"><div class="mlabel">Öğle</div><div class="mtxt">Yayla çorbası + fırında tavuk but (derisiz, 150 gr) + kepekli pirinç pilavı (5 yk) + cacık</div><div class="mkcal">~610 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 avuç leblebi (30 gr)</div><div class="mkcal">~120 kcal</div></div>
+        <div class="meal"><div class="mlabel">Akşam</div><div class="mtxt">Etsiz kuru fasulye (1 kase, zeytinyağıyla) + bulgur pilavı (4 yk) + mevsim salata + 1 dilim tam buğday</div><div class="mkcal">~610 kcal</div></div>
+      </div>
+
+      <div class="day">
+        <div class="day-head"><div class="dn">Perşembe</div><div class="dnum">Gün 04</div></div>
+        <div class="meal"><div class="mlabel">Kahvaltı</div><div class="mtxt">Labne (3 yk) + 4 ceviz + 1 tk bal + domates, salatalık + 2 ince dilim tam buğday</div><div class="mkcal">~460 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 muz</div><div class="mkcal">~100 kcal</div></div>
+        <div class="meal"><div class="mlabel">Öğle</div><div class="mtxt">Domates çorbası (sade, sütsüz) + izgara hamsi (150 gr) + zeytinyağlı enginar + roka salata</div><div class="mkcal">~570 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">Yoğurt (200 gr) + 1 tk chia veya keten tohumu</div><div class="mkcal">~140 kcal</div></div>
+        <div class="meal"><div class="mlabel">Akşam</div><div class="mtxt">Etli türlü (dana eti 100 gr + kabak, patlıcan, biber, az yağ) + bulgur pilavı (4 yk) + turşu</div><div class="mkcal">~620 kcal</div></div>
+      </div>
+
+      <div class="day accent">
+        <div class="day-head"><div class="dn">Cuma</div><div class="dnum">Gün 05</div></div>
+        <div class="meal"><div class="mlabel">Kahvaltı</div><div class="mtxt">Ispanaklı omlet (2 yumurta + 1 avuç ıspanak + 20 gr beyaz peynir, 1 tk zeytinyağı) + 1 dilim tam buğday + domates</div><div class="mkcal">~410 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 elma + 10 badem</div><div class="mkcal">~180 kcal</div></div>
+        <div class="meal"><div class="mlabel">Öğle</div><div class="mtxt">Yeşil mercimek çorbası + ızgara tavuk (150 gr) + bulgur pilavı (5 yk) + yeşil salata</div><div class="mkcal">~620 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 bardak ayran + 1 avuç leblebi</div><div class="mkcal">~170 kcal</div></div>
+        <div class="meal"><div class="mlabel">Akşam</div><div class="mtxt">Fırında levrek veya çipura (1 orta boy) + fırın sebze + ayran + yeşil salata</div><div class="mkcal">~560 kcal</div></div>
+      </div>
+
+      <div class="day">
+        <div class="day-head"><div class="dn">Cumartesi</div><div class="dnum">Gün 06</div></div>
+        <div class="meal"><div class="mlabel">Kahvaltı</div><div class="mtxt">Hafif Türk kahvaltısı: 1 yumurta + beyaz peynir (40 gr) + 5 zeytin + domates, salatalık, roka + 1 ince dilim tam buğday ekmek + şekersiz çay</div><div class="mkcal">~440 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 nar (küçük) veya 1 kivi + 4 ceviz</div><div class="mkcal">~160 kcal</div></div>
+        <div class="meal"><div class="mlabel">Öğle</div><div class="mtxt">Zeytinyağlı biber dolması (4 adet, etsiz) + 1 kase yoğurt + çoban salata</div><div class="mkcal">~560 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 elma + 1 tk fıstık ezmesi (şekersiz)</div><div class="mkcal">~190 kcal</div></div>
+        <div class="meal"><div class="mlabel">Akşam</div><div class="mtxt">Tavuk şiş (200 gr) + ızgara sebze + bulgur pilavı (4 yk) + cacık</div><div class="mkcal">~640 kcal</div></div>
+      </div>
+
+      <div class="day">
+        <div class="day-head"><div class="dn">Pazar</div><div class="dnum">Gün 07</div></div>
+        <div class="meal"><div class="mlabel">Kahvaltı</div><div class="mtxt">Ispanaklı omlet (2 yumurta) + çeyrek avokado + 1 dilim tam buğday + 5 zeytin</div><div class="mkcal">~470 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">Yoğurt (200 gr) + 1 tk keten tohumu + 4 çilek</div><div class="mkcal">~150 kcal</div></div>
+        <div class="meal"><div class="mlabel">Öğle</div><div class="mtxt">Tarhana çorbası + haşlanmış tavuk göğsü (120 gr) + kinoa veya bulgur pilavı (5 yk) + cacık</div><div class="mkcal">~580 kcal</div></div>
+        <div class="meal"><div class="mlabel">Ara</div><div class="mtxt">1 armut + 8 fındık</div><div class="mkcal">~170 kcal</div></div>
+        <div class="meal"><div class="mlabel">Akşam</div><div class="mtxt">Etli nohut yemeği (1 kase, az yağlı, dana 80 gr) + bulgur pilavı (4 yk) + yeşil salata</div><div class="mkcal">~620 kcal</div></div>
+      </div>
+
+    </div>
+
+    <p style="max-width:720px;font-size:14px;color:var(--ink-soft);font-style:italic;margin-top:24px">
+      <strong style="font-style:normal;color:var(--terra)">Esneklik notu:</strong> Aynı gün içindeki öğünler yer değiştirebilir, ancak haftanın genel yapısını koru. Dışarıda yenildiğinde: mercimek çorbası + ızgara + salata en güvenli üçlü. Şehir lezzetleri (lahmacun, pide) ayda 1–2'yi aşmasın.
+    </p>
+  </section>
+
+  <!-- DAILY TEMPLATE -->
+  <section id="gunluk">
+    <div class="sec-label">
+      <span class="num">03</span><span class="line"></span>
+      <span class="name">Günlük Şablon</span>
+    </div>
+    <h2>Bir günün <em>zaman çizelgesi</em>.</h2>
+    <p class="lede">Masa başı çalışma düzenine göre saat saat ne zaman ne yenir. Öğün aralarında 3–4 saat olsun — mide sürekli çalışmasın ama açlık da uzun sürmesin.</p>
+
+    <div class="daily">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-time">07:30 – 08:00</div>
+          <div class="tl-title">Kahvaltı</div>
+          <div class="tl-desc">Uyandıktan en geç 1 saat içinde. Protein + kompleks karbonhidrat + sebze. Şekerli kahvaltılık gevrek, reçel, kaymak minimum.</div>
+        </div>
+        <div class="tl-item accent">
+          <div class="tl-time">10:30</div>
+          <div class="tl-desc" style="padding-top:4px">1. ara öğün — meyve + kuruyemiş. Kahve ikinci fincan.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">13:00 – 13:30</div>
+          <div class="tl-title">Öğle yemeği</div>
+          <div class="tl-desc">Günün en büyük öğünü. Çorba + ana yemek + salata. Sofradan "%80 tok" kalk, "çok tok" değil.</div>
+        </div>
+        <div class="tl-item accent">
+          <div class="tl-time">16:30</div>
+          <div class="tl-desc" style="padding-top:4px">2. ara öğün — yoğurt veya leblebi + ayran. Akşam aç oturma.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">19:30 – 20:00</div>
+          <div class="tl-title">Akşam yemeği</div>
+          <div class="tl-desc">Öğleden daha hafif. Protein + sebze ağırlıklı, karbonhidrat az. Yatmadan en az 2.5–3 saat önce bitir.</div>
+        </div>
+        <div class="tl-item accent">
+          <div class="tl-time">22:30</div>
+          <div class="tl-desc" style="padding-top:4px"><strong>Mutfak kapalı.</strong> Aç hissedersen bitki çayı veya su. Gece atıştırması karaciğer için en kötüsü.</div>
+        </div>
+      </div>
+
+      <aside class="daily-aside">
+        <h4>Günün Kısa Özeti</h4>
+        <div class="macro-row"><span class="mn">Kalori</span><span class="mv">~2000 kcal</span></div>
+        <div class="macro-row"><span class="mn">Protein</span><span class="mv">~130 g</span></div>
+        <div class="macro-row"><span class="mn">Karbonhidrat</span><span class="mv">~210 g</span></div>
+        <div class="macro-row"><span class="mn">Yağ</span><span class="mv">~70 g</span></div>
+        <div class="macro-row"><span class="mn">Lif</span><span class="mv">≥ 30 g</span></div>
+        <div class="macro-row"><span class="mn">Su</span><span class="mv">2.5–3 L</span></div>
+
+        <div class="do-dont">
+          <div class="do">
+            <h5>Serbest</h5>
+            <ul>
+              <li>Yeşil çay, bitki çayı</li>
+              <li>Şekersiz kahve</li>
+              <li>Sebze (ham/haşlama)</li>
+              <li>Limon, sirke, baharat</li>
+              <li>Su</li>
+            </ul>
+          </div>
+          <div class="dont">
+            <h5>Bu dönem yok</h5>
+            <ul>
+              <li>Alkol</li>
+              <li>Gazlı içecek</li>
+              <li>Paket meyve suyu</li>
+              <li>Kızartma</li>
+              <li>Sucuk, salam, sosis</li>
+              <li>Tatlılar, şekerli</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- RECIPES -->
+  <section id="tarifler">
+    <div class="sec-label">
+      <span class="num">04</span><span class="line"></span>
+      <span class="name">Tarifler</span>
+    </div>
+    <h2>Yedi temel tarif, <em>malzemeleriyle</em>.</h2>
+    <p class="lede">Eşin için hazırlanmış, haftalık menünün belkemiğini oluşturan tarifler. Porsiyonlar 2 kişiliktir. Zeytinyağı ölçülerine dikkat — "göz kararı" koyulan yağ, diyetin en sessiz sabotörüdür.</p>
+
+    <div class="recipes">
+
+      <!-- RECIPE 1 -->
+      <article class="recipe">
+        <div class="rnum">01 — Çorba</div>
+        <h3>Ezogelin Çorbası</h3>
+        <span class="rtag liver">Karaciğer dostu</span>
+        <div class="rmeta">
+          <span><strong>⏱</strong> 35 dk</span>
+          <span><strong>🍽</strong> 4 kase</span>
+          <span><strong>~180</strong> kcal/kase</span>
+        </div>
+
+        <h4>Malzemeler</h4>
+        <ul class="malz">
+          <li><span class="nm">Kırmızı mercimek</span><span class="amt">1 su bardağı</span></li>
+          <li><span class="nm">Bulgur (köftelik)</span><span class="amt">2 yemek kaşığı</span></li>
+          <li><span class="nm">Pirinç</span><span class="amt">1 yemek kaşığı</span></li>
+          <li><span class="nm">Soğan (orta)</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Domates salçası</span><span class="amt">1 tatlı kaşığı</span></li>
+          <li><span class="nm">Biber salçası</span><span class="amt">1 tatlı kaşığı</span></li>
+          <li><span class="nm">Zeytinyağı</span><span class="amt">1 yemek kaşığı</span></li>
+          <li><span class="nm">Su</span><span class="amt">7 su bardağı</span></li>
+          <li><span class="nm">Kuru nane, pul biber, tuz</span><span class="amt">yarım tatlı kaşığı</span></li>
+        </ul>
+
+        <h4>Yapılışı</h4>
+        <ol class="steps">
+          <li>Soğanı ince doğra, zeytinyağında 2–3 dakika çevir (yakma).</li>
+          <li>Salçaları ekle, 1 dakika daha kavur.</li>
+          <li>Yıkanmış mercimek, bulgur ve pirinci ekle; suyu dök.</li>
+          <li>Kaynayınca kısık ateşte, ara ara karıştırarak 25 dakika pişir.</li>
+          <li>Tuz ve baharatları ekle, 2 dakika daha kaynat. Üzerine kuru nane serp.</li>
+        </ol>
+      </article>
+
+      <!-- RECIPE 2 -->
+      <article class="recipe">
+        <div class="rnum">02 — Ana Yemek</div>
+        <h3>Fırında Baharatlı Somon</h3>
+        <span class="rtag omega">Omega-3 · HDL+</span>
+        <div class="rmeta">
+          <span><strong>⏱</strong> 25 dk</span>
+          <span><strong>🍽</strong> 2 kişilik</span>
+          <span><strong>~380</strong> kcal</span>
+        </div>
+
+        <h4>Malzemeler</h4>
+        <ul class="malz">
+          <li><span class="nm">Somon fileto</span><span class="amt">2 x 150 gr</span></li>
+          <li><span class="nm">Zeytinyağı</span><span class="amt">1 yemek kaşığı</span></li>
+          <li><span class="nm">Limon suyu</span><span class="amt">yarım limon</span></li>
+          <li><span class="nm">Sarımsak (rendelenmiş)</span><span class="amt">1 diş</span></li>
+          <li><span class="nm">Kekik, karabiber</span><span class="amt">birer tatlı kaşığı</span></li>
+          <li><span class="nm">Tuz</span><span class="amt">az</span></li>
+          <li><span class="nm">Yanında: kabak, biber, domates, soğan</span><span class="amt">toplam 400 gr</span></li>
+        </ul>
+
+        <h4>Yapılışı</h4>
+        <ol class="steps">
+          <li>Fırını 200°C'ye ayarla. Sebzeleri iri doğra, tepsiye yay.</li>
+          <li>Somonları sebzelerin üzerine yerleştir.</li>
+          <li>Zeytinyağı, limon, sarımsak, baharatları karıştır; fırça ile somona sür.</li>
+          <li>18–20 dakika pişir; somonun içi pembe ama opak olmalı.</li>
+          <li>Çıkınca üstüne biraz daha limon sık; taze maydanozla servis et.</li>
+        </ol>
+      </article>
+
+      <!-- RECIPE 3 -->
+      <article class="recipe">
+        <div class="rnum">03 — Pilav</div>
+        <h3>Tane Tane Bulgur Pilavı</h3>
+        <span class="rtag">Kompleks karbonhidrat</span>
+        <div class="rmeta">
+          <span><strong>⏱</strong> 25 dk</span>
+          <span><strong>🍽</strong> 4 porsiyon</span>
+          <span><strong>~200</strong> kcal/porsiyon</span>
+        </div>
+
+        <h4>Malzemeler</h4>
+        <ul class="malz">
+          <li><span class="nm">Pilavlık bulgur</span><span class="amt">1.5 su bardağı</span></li>
+          <li><span class="nm">Sıcak su veya et suyu</span><span class="amt">2.5 su bardağı</span></li>
+          <li><span class="nm">Soğan (küçük)</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Domates (rendelenmiş)</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Yeşil biber</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Zeytinyağı</span><span class="amt">1.5 yemek kaşığı</span></li>
+          <li><span class="nm">Tuz, karabiber</span><span class="amt">az</span></li>
+        </ul>
+
+        <h4>Yapılışı</h4>
+        <ol class="steps">
+          <li>Soğan ve biberi ince doğra, zeytinyağında 3 dk çevir.</li>
+          <li>Rendelenmiş domatesi ekle, suyu çekene kadar kavur.</li>
+          <li>Bulguru ekle, 2 dakika soğanla birlikte kavur.</li>
+          <li>Sıcak suyu ve tuzu ekle, kaynayınca kısık ateşte 12–15 dk.</li>
+          <li>Ocağı kapat, temiz bir bezle kapağı örtüp 10 dk demlendir. Servis ederken çatalla havalandır.</li>
+        </ol>
+      </article>
+
+      <!-- RECIPE 4 -->
+      <article class="recipe">
+        <div class="rnum">04 — Zeytinyağlı</div>
+        <h3>Zeytinyağlı Taze Fasulye</h3>
+        <span class="rtag">Lif · Potasyum</span>
+        <div class="rmeta">
+          <span><strong>⏱</strong> 40 dk</span>
+          <span><strong>🍽</strong> 4 porsiyon</span>
+          <span><strong>~150</strong> kcal/porsiyon</span>
+        </div>
+
+        <h4>Malzemeler</h4>
+        <ul class="malz">
+          <li><span class="nm">Taze fasulye</span><span class="amt">500 gr</span></li>
+          <li><span class="nm">Soğan</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Domates</span><span class="amt">2 adet</span></li>
+          <li><span class="nm">Sarımsak</span><span class="amt">2 diş</span></li>
+          <li><span class="nm">Zeytinyağı</span><span class="amt">2.5 yemek kaşığı</span></li>
+          <li><span class="nm">Şeker</span><span class="amt">yarım tatlı kaşığı (ops.)</span></li>
+          <li><span class="nm">Tuz, su</span><span class="amt">1 su bardağı su</span></li>
+        </ul>
+
+        <h4>Yapılışı</h4>
+        <ol class="steps">
+          <li>Fasulyeleri ayıkla, iri iri kır, yıka.</li>
+          <li>Soğanı yemeklik doğra, zeytinyağında 3 dk çevir.</li>
+          <li>Sarımsak, sonra doğranmış domatesi ekle, 2 dk pişir.</li>
+          <li>Fasulyeyi ekle, 5 dakika birlikte çevir. Suyu ve tuzu koy.</li>
+          <li>Kapağı kapat, kısık ateşte 30 dk. Oda sıcaklığında servis — karaciğer için sıcaktan daha rahat.</li>
+        </ol>
+      </article>
+
+      <!-- RECIPE 5 -->
+      <article class="recipe">
+        <div class="rnum">05 — Izgara</div>
+        <h3>Yağsız Dana Köfte</h3>
+        <span class="rtag">Yüksek protein</span>
+        <div class="rmeta">
+          <span><strong>⏱</strong> 30 dk</span>
+          <span><strong>🍽</strong> 4 porsiyon</span>
+          <span><strong>~240</strong> kcal/porsiyon</span>
+        </div>
+
+        <h4>Malzemeler</h4>
+        <ul class="malz">
+          <li><span class="nm">Dana kıyma (yağsız, %10 yağ)</span><span class="amt">500 gr</span></li>
+          <li><span class="nm">Soğan (küçük, rende)</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Sarımsak</span><span class="amt">2 diş</span></li>
+          <li><span class="nm">Tam buğday galeta unu</span><span class="amt">2 yemek kaşığı</span></li>
+          <li><span class="nm">Yumurta</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Kimyon, kekik, karabiber, tuz</span><span class="amt">yeterince</span></li>
+          <li><span class="nm">Maydanoz (ince)</span><span class="amt">3 dal</span></li>
+        </ul>
+
+        <h4>Yapılışı</h4>
+        <ol class="steps">
+          <li>Bütün malzemeyi derin kaba al, en az 5 dakika yoğur (bu kıvamın sırrı).</li>
+          <li>Buzdolabında 30 dk dinlendir.</li>
+          <li>Yumurta büyüklüğünde parçalara ayır, basık şekil ver.</li>
+          <li>Yapışmaz tavada yağsız, orta ateşte her yüzü 4–5 dakika; veya ızgara/fırında 200°C'de 15 dk.</li>
+          <li>Yanında mevsim salata + cacık. Ekmek yerine bulgur pilavı.</li>
+        </ol>
+      </article>
+
+      <!-- RECIPE 6 -->
+      <article class="recipe">
+        <div class="rnum">06 — Kahvaltı</div>
+        <h3>Az Yağlı Menemen</h3>
+        <span class="rtag">Hızlı protein</span>
+        <div class="rmeta">
+          <span><strong>⏱</strong> 12 dk</span>
+          <span><strong>🍽</strong> 2 kişilik</span>
+          <span><strong>~290</strong> kcal/porsiyon</span>
+        </div>
+
+        <h4>Malzemeler</h4>
+        <ul class="malz">
+          <li><span class="nm">Yumurta</span><span class="amt">4 adet</span></li>
+          <li><span class="nm">Domates (orta, soyulmuş)</span><span class="amt">3 adet</span></li>
+          <li><span class="nm">Yeşil biber (sivri)</span><span class="amt">2 adet</span></li>
+          <li><span class="nm">Zeytinyağı</span><span class="amt">1 yemek kaşığı (toplam)</span></li>
+          <li><span class="nm">Tuz, karabiber, pul biber</span><span class="amt">az</span></li>
+          <li><span class="nm">Üzerine taze maydanoz</span><span class="amt">2 dal</span></li>
+        </ul>
+
+        <h4>Yapılışı</h4>
+        <ol class="steps">
+          <li>Biberleri doğra, zeytinyağında 3 dakika çevir.</li>
+          <li>Rendelenmiş domatesi ekle, suyu çekilene kadar pişir (6–7 dk).</li>
+          <li>Yumurtaları kırıp üzerine bırak. Sarı-beyazı karıştırmadan ya da hafifçe kırarak pişir.</li>
+          <li>3–4 dakika sonra ocağı kapat; tencerenin kendi ısısı yumurtayı pişirmeye devam eder.</li>
+          <li>Peynir ekleme — kalori ve tuz çok yükselir. Yanında 1 dilim tam buğday yeter.</li>
+        </ol>
+      </article>
+
+      <!-- RECIPE 7 -->
+      <article class="recipe">
+        <div class="rnum">07 — Baklagil</div>
+        <h3>Az Yağlı Kuru Fasulye</h3>
+        <span class="rtag">Bitkisel protein · Lif</span>
+        <div class="rmeta">
+          <span><strong>⏱</strong> 1 saat (+ıslatma)</span>
+          <span><strong>🍽</strong> 4 porsiyon</span>
+          <span><strong>~260</strong> kcal/porsiyon</span>
+        </div>
+
+        <h4>Malzemeler</h4>
+        <ul class="malz">
+          <li><span class="nm">Kuru fasulye</span><span class="amt">2 su bardağı</span></li>
+          <li><span class="nm">Soğan</span><span class="amt">1 adet</span></li>
+          <li><span class="nm">Domates salçası</span><span class="amt">1 yemek kaşığı</span></li>
+          <li><span class="nm">Biber salçası</span><span class="amt">1 tatlı kaşığı</span></li>
+          <li><span class="nm">Zeytinyağı</span><span class="amt">1.5 yemek kaşığı</span></li>
+          <li><span class="nm">Sıcak su</span><span class="amt">yaklaşık 4 su bardağı</span></li>
+          <li><span class="nm">Tuz, karabiber, pul biber</span><span class="amt">az</span></li>
+        </ul>
+
+        <h4>Yapılışı</h4>
+        <ol class="steps">
+          <li>Fasulyeyi bir gece önceden bolca soğuk suda ıslat. Ertesi gün süzüp yıka.</li>
+          <li>Düdüklü tencerede soğanı zeytinyağında pembeleştir, salçaları ekle 1 dk.</li>
+          <li>Fasulyeyi ve üzerini 2 parmak geçecek sıcak suyu ekle.</li>
+          <li>Düdük ötmeye başlayınca kısık ateşte 25 dk; normal tencerede 60–70 dk.</li>
+          <li>Pişince tuzu ve baharatları ekle, 5 dk daha. Yanında 1 kase bulgur pilavı + turşu yeterli.</li>
+        </ol>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SHOPPING LIST -->
+  <section id="market">
+    <div class="sec-label">
+      <span class="num">05</span><span class="line"></span>
+      <span class="name">Market Listesi</span>
+    </div>
+    <h2>Mutfakta <em>sürekli bulunması</em> gerekenler.</h2>
+    <p class="lede">İki bölüm halinde: bir kere alınıp aylarca yeten "kiler", her hafta tazelenen "haftalık". Eşin bu listeyi telefonunun notuna kopyalasın, market yolunda açsın.</p>
+
+    <div class="shop">
+      <div class="shop-col">
+        <h4>Kiler</h4>
+        <div class="hint">Ayda bir tazelenir</div>
+        <ul>
+          <li>Sızma zeytinyağı (büyük şişe)</li>
+          <li>Yulaf ezmesi</li>
+          <li>Pilavlık ve köftelik bulgur</li>
+          <li>Kepekli pirinç</li>
+          <li>Kırmızı &amp; yeşil mercimek</li>
+          <li>Nohut</li>
+          <li>Kuru fasulye</li>
+          <li>Tam buğday galeta unu</li>
+          <li>Ceviz içi (çiğ)</li>
+          <li>Badem, fındık (çiğ)</li>
+          <li>Keten tohumu</li>
+          <li>Chia tohumu</li>
+          <li>Leblebi (sarı, tuzsuz)</li>
+          <li>Zeytin (az tuzlu siyah)</li>
+          <li>Domates salçası (ev yapımı tercih)</li>
+          <li>Biber salçası</li>
+          <li>Kuru baharat: kekik, kimyon, pul biber, karabiber, nane, tarçın</li>
+          <li>Türk kahvesi / filtre kahve</li>
+          <li>Yeşil çay</li>
+          <li>Bal (küçük şişe, ara sıra)</li>
+        </ul>
+      </div>
+
+      <div class="shop-col">
+        <h4>Haftalık — Protein</h4>
+        <div class="hint">Her Pazar gelir, pazartesi porsiyonlara ayrılır</div>
+        <ul>
+          <li>Tavuk göğüs fileto (800 gr)</li>
+          <li>Tavuk but (derisi alınmış, 500 gr)</li>
+          <li>Yağsız dana kıyma (400 gr)</li>
+          <li>Yağsız dana kuşbaşı (300 gr)</li>
+          <li>Somon fileto (300 gr)</li>
+          <li>Taze hamsi/sardalya veya levrek (500 gr)</li>
+          <li>Yumurta (30'luk)</li>
+          <li>Beyaz peynir (az tuzlu, 300 gr)</li>
+          <li>Lor peyniri (200 gr)</li>
+          <li>Labne (1 küçük kase)</li>
+          <li>Yoğurt (tam yağlı değil, yağı azaltılmış, 1 kg)</li>
+          <li>Ayran (şekersiz, sade)</li>
+        </ul>
+      </div>
+
+      <div class="shop-col">
+        <h4>Haftalık — Sebze &amp; Meyve</h4>
+        <div class="hint">Mevsime göre değişir</div>
+        <ul>
+          <li>Domates, salatalık, biber, soğan</li>
+          <li>Maydanoz, roka, taze soğan</li>
+          <li>Ispanak, pazı veya semizotu</li>
+          <li>Taze fasulye, kabak, patlıcan</li>
+          <li>Brokoli, karnabahar</li>
+          <li>Marul, kıvırcık, taze yeşillik</li>
+          <li>Havuç</li>
+          <li>Sarımsak, limon (bol)</li>
+          <li>Elma (4–5 adet)</li>
+          <li>Armut (3–4 adet)</li>
+          <li>Portakal veya mandalina</li>
+          <li>Muz (3–4 adet — haftaya yayılacak)</li>
+          <li>Mevsim meyvesi (nar, çilek, kivi)</li>
+          <li>Avokado (1 adet)</li>
+        </ul>
+      </div>
+
+      <div class="shop-col">
+        <h4>Ekmek &amp; Fırın</h4>
+        <div class="hint">2–3 günde bir</div>
+        <ul>
+          <li>Tam buğday ekmek (ince dilimli tercih)</li>
+          <li>Çavdar ekmek (alternatif)</li>
+          <li>Beyaz ekmek, simit, poğaça — <strong>yok</strong></li>
+        </ul>
+        <h4 style="margin-top:22px">Evde hiç bulunmasın</h4>
+        <div class="hint" style="color:var(--red)">Görünce yenir, görünmeyince unutulur</div>
+        <ul>
+          <li>Cips, kraker, bisküvi</li>
+          <li>Kola, gazoz, paket meyve suyu</li>
+          <li>Çikolata (yüksek kakaolu küçük parça istisna)</li>
+          <li>Dondurma</li>
+          <li>Hazır kek, bisküvi, gofret</li>
+          <li>Sucuk, salam, sosis, pastırma</li>
+          <li>Margarin, tereyağı (mutfakta tut ama yemekte kullanma)</li>
+          <li>Şeker (pekmez veya az bal yerine geçer)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MONTHLY -->
+  <section id="aylik">
+    <div class="sec-label">
+      <span class="num">06</span><span class="line"></span>
+      <span class="name">12 Haftalık Yol Haritası</span>
+    </div>
+    <h2>Üç ayda <em>ölçülebilir</em> değişim.</h2>
+    <p class="lede">Diyet tek başına değil, ayları olan bir süreç. Her ayın farklı bir odağı var — birinci ay alışma, ikinci ay yerleşme, üçüncü ay kontrol. 12 hafta sonunda tahlil tekrarı.</p>
+
+    <div class="roadmap">
+
+      <div class="month-card">
+        <div class="mlab">Ay 01 · Hafta 1–4</div>
+        <h3>Alışma</h3>
+        <div class="mgoal">Hedef: -3 ila -4 kg → ~104 kg</div>
+        <ul>
+          <li>Kahvaltıdan başla: 2 yumurta + peynir + sebze, tam buğday 1 dilim</li>
+          <li>Alkol ve gazlı içecek tamamen bırak</li>
+          <li>Evdeki abur cubur, cips, bisküvi, çikolataları at</li>
+          <li>Günde 30 dk yürüyüş (akşam yemeğinden sonra)</li>
+          <li>Günde 2.5 L su — 1 L'lik şişe ile takip</li>
+          <li>Haftada bir, Cumartesi sabahı tart</li>
+        </ul>
+      </div>
+
+      <div class="month-card">
+        <div class="mlab">Ay 02 · Hafta 5–8</div>
+        <h3>Yerleşme</h3>
+        <div class="mgoal">Hedef: -3 kg → ~101 kg</div>
+        <ul>
+          <li>Porsiyon kontrolü hassaslaşır — pilav 4 yemek kaşığı, et 120 gr</li>
+          <li>Yürüyüşü 45 dakikaya çıkar</li>
+          <li>Haftada 2 balık kesinleşir (Perşembe + Cuma veya Pazar)</li>
+          <li>Masa başında her 45 dk'da bir 2 dk kalk</li>
+          <li>Akşam 20:30'dan sonra mutfak kapalı kuralı</li>
+          <li>Tatlı isteği — 2 parça %70 kakao çikolata izinli</li>
+        </ul>
+      </div>
+
+      <div class="month-card">
+        <div class="mlab">Ay 03 · Hafta 9–12</div>
+        <h3>Kontrol</h3>
+        <div class="mgoal">Hedef: -2.5 kg → ~98.5 kg</div>
+        <ul>
+          <li>Hafta 10: kilo yavaşlayabilir — panik yok, süreç normal</li>
+          <li>Haftada 1 direnç egzersizi ekle (vücut ağırlığıyla)</li>
+          <li>Dışarıda yeme arttıysa Cumartesi daha hafif öğün</li>
+          <li><strong>Hafta 12 sonunda tahlil tekrarı:</strong> ALT, AST, tam lipit, HbA1c, CRP, folat</li>
+          <li>Aile hekimine kontrol randevusu al</li>
+          <li>Tartıda ~10 kg, enerji farkı çok belirgin olacak</li>
+        </ul>
+      </div>
+
+      <div class="month-card target">
+        <div class="mlab">Ay 04–06 · Devam</div>
+        <h3>Rotaya Oturt</h3>
+        <div class="mgoal">Hedef: 90 kg · ALT &lt; 40 · HDL &gt; 40</div>
+        <ul>
+          <li>Aynı plan, aynı ritim — yaşam tarzı hâline gel</li>
+          <li>Haftalık kayıp yavaşlar (200–400 gr normal)</li>
+          <li>Dışarıda yemek, özel günler ustalıkla yönetilir</li>
+          <li>Kahvaltı, yürüyüş, uyku — üç temel sabit kalır</li>
+          <li>85 kg altı için diyetisyen desteği iyi olur</li>
+          <li>Bu plan, hedefe vardıktan sonra %10–15 daha kalori eklenerek koruma moduna geçer</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaim">
+    <strong>Önemli Not</strong>
+    Bu plan, 17.04.2026 tarihli tahlil sonuçlarına ve genel beslenme ilkelerine dayalı bir rehberdir — bireysel tıbbi tavsiye veya reçete değildir. Özellikle ALT 100 değeri için aile hekiminle mutlaka görüş, hepatit tarama ve karaciğer ultrasonu önerebilir. Diyet uygulamadan önce hekimine ve mümkünse bir beslenme uzmanına danış. Kullandığın ilaç varsa veya sağlık sorunun açığa çıkarsa planı hekimle birlikte ayarla.
+  </div>
+
+  <footer>
+    Hazırlandı: 20 Nisan 2026 · Fatih için · Samsun
+  </footer>
+
+</main>
+
+</body>
+</html>
