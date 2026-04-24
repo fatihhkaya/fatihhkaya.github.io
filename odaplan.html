@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Oda Planlaması</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #f5f3ef;
+    --card: #ffffff;
+    --border: #c8bfb3;
+    --border-light: #e2ddd6;
+    --text: #2c2520;
+    --text-muted: #7a7068;
+    --accent: #1a6b4a;
+    --accent-light: #e8f5ee;
+    --accent-dark: #134f37;
+    --danger: #c0392b;
+    --header-bg: #1a6b4a;
+    --header-text: #ffffff;
+    --room2: #1a6b4a;
+    --room3: #2c6fbb;
+    --room4: #8b5a2b;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --radius: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+    padding-bottom: 40px;
+  }
+
+  .top-bar {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 16px 20px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow-md);
+  }
+  .top-bar h1 { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
+  .top-bar p { font-size: 12px; opacity: .8; margin-top: 2px; }
+
+  .action-bar {
+    display: flex; gap: 8px; padding: 12px 16px;
+    background: var(--card); border-bottom: 1px solid var(--border-light);
+    position: sticky; top: 68px; z-index: 99;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .action-bar::-webkit-scrollbar { display: none; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border: none; border-radius: 8px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: all .15s; flex-shrink: 0;
+  }
+  .btn:active { transform: scale(.96); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-outline { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+  .btn-danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
+  .btn svg { width: 16px; height: 16px; }
+
+  .container { padding: 16px; max-width: 800px; margin: 0 auto; }
+
+  .meta-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .meta-field {
+    background: var(--card); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 10px 14px; box-shadow: var(--shadow);
+  }
+  .meta-field label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px;
+  }
+  .meta-field input {
+    width: 100%; border: none; outline: none; font-family: inherit;
+    font-size: 15px; font-weight: 500; color: var(--text); background: transparent;
+  }
+
+  .room-type-section { margin-bottom: 20px; }
+  .room-type-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border-radius: var(--radius); margin-bottom: 10px;
+    color: #fff; font-weight: 700; font-size: 14px;
+  }
+  .room-type-header.type-2 { background: var(--room2); }
+  .room-type-header.type-3 { background: var(--room3); }
+  .room-type-header.type-4 { background: var(--room4); }
+  .room-type-header .count-badge {
+    background: rgba(255,255,255,.25); padding: 3px 10px; border-radius: 20px; font-size: 12px;
+  }
+
+  .add-room-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; padding: 10px; border: 2px dashed var(--border); border-radius: var(--radius);
+    background: transparent; color: var(--text-muted); font-family: inherit;
+    font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: all .15s;
+  }
+  .add-room-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+  .room-card {
+    background: var(--card); border: 1px solid var(--border-light);
+    border-radius: var(--radius); margin-bottom: 8px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .room-card:focus-within { box-shadow: var(--shadow-md); }
+  .room-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; font-size: 12px; font-weight: 700; color: #fff;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .room-card-header.type-2 { background: var(--room2); }
+  .room-card-header.type-3 { background: var(--room3); }
+  .room-card-header.type-4 { background: var(--room4); }
+
+  .room-delete-btn {
+    background: rgba(255,255,255,.2); border: none; color: #fff;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
+  }
+
+  .room-card-body { padding: 8px 12px 12px; }
+  .person-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 0; border-bottom: 1px solid var(--border-light);
+  }
+  .person-row:last-child { border-bottom: none; }
+  .person-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .person-num.c2 { background: var(--room2); }
+  .person-num.c3 { background: var(--room3); }
+  .person-num.c4 { background: var(--room4); }
+
+  .person-input {
+    flex: 1; border: none; outline: none; font-family: inherit;
+    font-size: 14px; color: var(--text); background: transparent; padding: 4px 0;
+  }
+  .person-input::placeholder { color: var(--border); }
+
+  .footer-section {
+    background: var(--card); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 16px; margin-top: 20px; box-shadow: var(--shadow);
+  }
+  .footer-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+  .footer-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .footer-field label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px;
+  }
+  .footer-field input {
+    width: 100%; border: 1px solid var(--border-light); border-radius: 6px;
+    padding: 8px 10px; font-family: inherit; font-size: 14px; color: var(--text); outline: none;
+  }
+  .footer-field input:focus { border-color: var(--accent); }
+
+  .sig-area { margin-top: 12px; }
+  .sig-area label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+  }
+  .sig-canvas-wrap {
+    border: 2px solid var(--border); border-radius: 8px;
+    background: #fafaf8; position: relative; overflow: hidden;
+  }
+  .sig-canvas-wrap canvas { display: block; width: 100%; touch-action: none; }
+  .sig-clear {
+    position: absolute; top: 8px; right: 8px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 6px;
+    padding: 4px 10px; font-size: 11px; font-weight: 600; color: var(--text-muted); cursor: pointer;
+  }
+
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
+    z-index: 200; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: var(--card); border-radius: 16px; padding: 24px;
+    width: 100%; max-width: 400px; text-align: center;
+  }
+  .modal-box h3 { margin-bottom: 8px; font-size: 18px; }
+  .modal-box p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+  .loading-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(255,255,255,.85);
+    z-index: 300; align-items: center; justify-content: center; flex-direction: column; gap: 12px;
+  }
+  .loading-overlay.active { display: flex; }
+  .spinner {
+    width: 36px; height: 36px; border: 3px solid var(--border-light);
+    border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>ODA PLANLAMASI</h1>
+  <p>Hac / Umre Konaklama Formu</p>
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-primary" onclick="exportPDF()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+    PDF İndir
+  </button>
+  <button class="btn btn-outline" onclick="saveData()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    Kaydet
+  </button>
+  <button class="btn btn-outline" onclick="loadData()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Yükle
+  </button>
+  <button class="btn btn-danger" onclick="confirmClear()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    Temizle
+  </button>
+</div>
+
+<div class="container" id="main-form">
+  <div class="meta-section">
+    <div class="meta-field">
+      <label>Kafile</label>
+      <input type="text" id="kafile" placeholder="Kafile adı...">
+    </div>
+    <div class="meta-field">
+      <label>Grup</label>
+      <input type="text" id="grup" placeholder="Grup adı...">
+    </div>
+  </div>
+
+  <div class="room-type-section" id="section-2">
+    <div class="room-type-header type-2">
+      <span>2 Kişilik Oda</span>
+      <span class="count-badge" id="count-2">8 Oda</span>
+    </div>
+    <div id="rooms-2"></div>
+    <button class="add-room-btn" onclick="addRoom(2)">+ Oda Ekle</button>
+  </div>
+
+  <div class="room-type-section" id="section-3">
+    <div class="room-type-header type-3">
+      <span>3 Kişilik Oda</span>
+      <span class="count-badge" id="count-3">7 Oda</span>
+    </div>
+    <div id="rooms-3"></div>
+    <button class="add-room-btn" onclick="addRoom(3)">+ Oda Ekle</button>
+  </div>
+
+  <div class="room-type-section" id="section-4">
+    <div class="room-type-header type-4">
+      <span>4 Kişilik Oda</span>
+      <span class="count-badge" id="count-4">7 Oda</span>
+    </div>
+    <div id="rooms-4"></div>
+    <button class="add-room-btn" onclick="addRoom(4)">+ Oda Ekle</button>
+  </div>
+
+  <div class="footer-section">
+    <h3>Yetkili Bilgileri</h3>
+    <div class="footer-fields">
+      <div class="footer-field">
+        <label>Din Görevlisi Adı Soyadı</label>
+        <input type="text" id="din-gorevlisi" placeholder="Ad Soyad...">
+      </div>
+      <div class="footer-field">
+        <label>Tarih</label>
+        <input type="date" id="tarih">
+      </div>
+    </div>
+    <div class="sig-area">
+      <label>İmza</label>
+      <div class="sig-canvas-wrap">
+        <canvas id="sig-canvas" height="150"></canvas>
+        <button class="sig-clear" onclick="clearSig()">Temizle</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="clear-modal">
+  <div class="modal-box">
+    <h3>Formu Temizle</h3>
+    <p>Tüm bilgiler silinecek. Devam etmek istiyor musunuz?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">İptal</button>
+      <button class="btn btn-danger" onclick="clearAll()" style="border:none;background:var(--danger);color:#fff;">Temizle</button>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <span style="font-size:14px;color:var(--text-muted);">PDF hazırlanıyor...</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// FORM LOGIC
+// ═══════════════════════════════════════
+let roomCounters = { 2: 0, 3: 0, 4: 0 };
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function addRoom(size, names) {
+  roomCounters[size]++;
+  const num = roomCounters[size];
+  const container = document.getElementById(`rooms-${size}`);
+  const card = document.createElement('div');
+  card.className = 'room-card';
+  card.dataset.size = size;
+  let rows = '';
+  for (let i = 1; i <= size; i++) {
+    const v = names && names[i-1] ? names[i-1] : '';
+    rows += `<div class="person-row"><div class="person-num c${size}">${i}</div><input type="text" class="person-input" placeholder="${i}. kişi" value="${esc(v)}"></div>`;
+  }
+  card.innerHTML = `<div class="room-card-header type-${size}"><span>Oda ${num}</span><button class="room-delete-btn" onclick="removeRoom(this)">✕</button></div><div class="room-card-body">${rows}</div>`;
+  container.appendChild(card);
+  updateCount(size);
+}
+
+function removeRoom(btn) {
+  const card = btn.closest('.room-card');
+  const size = parseInt(card.dataset.size);
+  card.remove();
+  renumberRooms(size);
+}
+
+function renumberRooms(size) {
+  const cards = document.querySelectorAll(`#rooms-${size} .room-card`);
+  roomCounters[size] = cards.length;
+  cards.forEach((c, i) => { c.querySelector('.room-card-header span').textContent = `Oda ${i+1}`; });
+  updateCount(size);
+}
+
+function updateCount(size) {
+  const n = document.querySelectorAll(`#rooms-${size} .room-card`).length;
+  document.getElementById(`count-${size}`).textContent = `${n} Oda`;
+}
+
+function initRooms() {
+  for (let i = 0; i < 8; i++) addRoom(2);
+  for (let i = 0; i < 7; i++) addRoom(3);
+  for (let i = 0; i < 7; i++) addRoom(4);
+  document.getElementById('tarih').valueAsDate = new Date();
+}
+
+// ═══════════════════════════════════════
+// SIGNATURE
+// ═══════════════════════════════════════
+const sigCanvas = document.getElementById('sig-canvas');
+const sigCtx = sigCanvas.getContext('2d');
+let drawing = false, sigEmpty = true;
+
+function resizeSig() {
+  const w = sigCanvas.parentElement.getBoundingClientRect().width;
+  const dpr = window.devicePixelRatio || 1;
+  sigCanvas.width = w * dpr;
+  sigCanvas.height = 150 * dpr;
+  sigCanvas.style.height = '150px';
+  sigCtx.scale(dpr, dpr);
+  sigCtx.lineWidth = 2; sigCtx.lineCap = 'round'; sigCtx.lineJoin = 'round'; sigCtx.strokeStyle = '#222';
+}
+
+function gp(e) { const r = sigCanvas.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: t.clientX - r.left, y: t.clientY - r.top }; }
+sigCanvas.addEventListener('pointerdown', e => { drawing = true; sigEmpty = false; const p = gp(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); e.preventDefault(); });
+sigCanvas.addEventListener('pointermove', e => { if (!drawing) return; const p = gp(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); e.preventDefault(); });
+sigCanvas.addEventListener('pointerup', () => drawing = false);
+sigCanvas.addEventListener('pointerleave', () => drawing = false);
+
+function clearSig() { const dpr = window.devicePixelRatio || 1; sigCtx.clearRect(0, 0, sigCanvas.width/dpr, sigCanvas.height/dpr); sigEmpty = true; }
+
+// ═══════════════════════════════════════
+// SAVE / LOAD
+// ═══════════════════════════════════════
+function gatherData() {
+  const d = { kafile: document.getElementById('kafile').value, grup: document.getElementById('grup').value, dinGorevlisi: document.getElementById('din-gorevlisi').value, tarih: document.getElementById('tarih').value, signature: sigEmpty ? null : sigCanvas.toDataURL(), rooms: {} };
+  [2,3,4].forEach(s => {
+    d.rooms[s] = [];
+    document.querySelectorAll(`#rooms-${s} .room-card`).forEach(c => {
+      const names = []; c.querySelectorAll('.person-input').forEach(inp => names.push(inp.value)); d.rooms[s].push(names);
+    });
+  });
+  return d;
+}
+
+function saveData() { localStorage.setItem('odaPlanlamasi', JSON.stringify(gatherData())); showToast('Kaydedildi!'); }
+
+function loadData() {
+  const raw = localStorage.getItem('odaPlanlamasi');
+  if (!raw) { showToast('Kayıtlı veri bulunamadı.'); return; }
+  const d = JSON.parse(raw);
+  document.getElementById('kafile').value = d.kafile || '';
+  document.getElementById('grup').value = d.grup || '';
+  document.getElementById('din-gorevlisi').value = d.dinGorevlisi || '';
+  document.getElementById('tarih').value = d.tarih || '';
+  [2,3,4].forEach(s => { document.getElementById(`rooms-${s}`).innerHTML = ''; roomCounters[s] = 0; if (d.rooms && d.rooms[s]) d.rooms[s].forEach(n => addRoom(s, n)); });
+  if (d.signature) { const img = new Image(); img.onload = () => { const dpr = window.devicePixelRatio||1; sigCtx.clearRect(0,0,sigCanvas.width/dpr,sigCanvas.height/dpr); sigCtx.drawImage(img,0,0,sigCanvas.width/dpr,sigCanvas.height/dpr); sigEmpty = false; }; img.src = d.signature; }
+  showToast('Yüklendi!');
+}
+
+function confirmClear() { document.getElementById('clear-modal').classList.add('active'); }
+function closeModal() { document.getElementById('clear-modal').classList.remove('active'); }
+function clearAll() { closeModal(); document.getElementById('kafile').value=''; document.getElementById('grup').value=''; document.getElementById('din-gorevlisi').value=''; document.getElementById('tarih').valueAsDate=new Date(); [2,3,4].forEach(s=>{document.getElementById(`rooms-${s}`).innerHTML='';roomCounters[s]=0;}); clearSig(); initRooms(); showToast('Form temizlendi.'); }
+
+function showToast(msg) {
+  let t = document.createElement('div'); t.textContent = msg;
+  Object.assign(t.style, { position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%)',background:'#333',color:'#fff',padding:'10px 24px',borderRadius:'8px',fontSize:'14px',fontWeight:'600',zIndex:'400',opacity:'0',transition:'opacity .3s',fontFamily:'Noto Sans,sans-serif' });
+  document.body.appendChild(t);
+  requestAnimationFrame(() => t.style.opacity = '1');
+  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 1800);
+}
+
+// ═══════════════════════════════════════
+// PDF EXPORT — FLOWING COLUMN LAYOUT
+// ═══════════════════════════════════════
+async function exportPDF() {
+  const loading = document.getElementById('loading');
+  loading.classList.add('active');
+  await new Promise(r => setTimeout(r, 50));
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const data = gatherData();
+
+    // ── Layout constants (mm) ──
+    const PW = 210, PH = 297;
+    const ML = 10, MR = 10, MT = 8, MB = 8;
+    const COLS = 3, COL_GAP = 4;
+    const COL_W = (PW - ML - MR - (COLS - 1) * COL_GAP) / COLS;
+
+    const HEADER_H = 14;
+    const META_H = 8;
+    const FOOTER_H = 26;
+    const SECTION_LABEL_H = 6;
+    const ROOM_HEADER_H = 5;
+    const PERSON_ROW_H = 5.2;
+    const ROOM_GAP = 2.5;
+    const ROOM_PAD = 0.8;
+
+    const COLORS = { 2: [26,107,74], 3: [44,111,187], 4: [139,90,43] };
+    const LABELS = { 2: '2 Kişilik Oda', 3: '3 Kişilik Oda', 4: '4 Kişilik Oda' };
+
+    let pageNum = 0, curCol = 0, curY = 0;
+
+    const colX = () => ML + curCol * (COL_W + COL_GAP);
+    const contentTop = () => MT + HEADER_H + META_H + 2;
+    const contentBottom = () => PH - MB - FOOTER_H;
+    const availH = () => contentBottom() - curY;
+    const roomH = (size) => ROOM_HEADER_H + size * PERSON_ROW_H + ROOM_PAD;
+
+    // ── Page chrome ──
+    function drawPageChrome() {
+      // Header bar
+      pdf.setFillColor(26, 107, 74);
+      pdf.rect(0, 0, PW, MT + HEADER_H, 'F');
+      pdf.setFont('helvetica', 'bold'); pdf.setFontSize(15); pdf.setTextColor(255,255,255);
+      pdf.text('ODA PLANLAMASI', PW/2, MT + 6, { align: 'center' });
+      pdf.setFontSize(7.5);
+      pdf.text('Hac / Umre Konaklama Formu', PW/2, MT + 10.5, { align: 'center' });
+
+      // Meta line
+      const my = MT + HEADER_H + 3;
+      pdf.setFontSize(9); pdf.setFont('helvetica', 'bold'); pdf.setTextColor(50,50,50);
+      pdf.text('Kafile:', ML, my + 3);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(data.kafile || '________________________', ML + 14, my + 3);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Grup:', PW/2 + 5, my + 3);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(data.grup || '________________________', PW/2 + 17, my + 3);
+
+      // Footer area
+      const fY = contentBottom() + 2;
+      pdf.setDrawColor(170,170,170); pdf.setLineWidth(0.3);
+      pdf.line(ML, fY, PW - MR, fY);
+
+      const thirds = (PW - ML - MR) / 3;
+
+      // Din Görevlisi
+      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(90,90,90);
+      pdf.text('Din Görevlisi Adı Soyadı', ML, fY + 5);
+      pdf.setFont('helvetica','normal'); pdf.setFontSize(9); pdf.setTextColor(30,30,30);
+      if (data.dinGorevlisi) {
+        pdf.text(data.dinGorevlisi, ML, fY + 11);
+      } else {
+        pdf.setDrawColor(170,170,170); pdf.line(ML, fY + 13, ML + thirds - 6, fY + 13);
+      }
+
+      // İmza
+      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(90,90,90);
+      const imzaX = ML + thirds + 8;
+      pdf.text('İmza', imzaX, fY + 5);
+      if (data.signature) {
+        try { pdf.addImage(data.signature, 'PNG', imzaX, fY + 6, 38, 15); } catch(e) {}
+      } else {
+        pdf.setDrawColor(170,170,170); pdf.line(imzaX, fY + 19, imzaX + 40, fY + 19);
+      }
+
+      // Tarih
+      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(90,90,90);
+      const tarihX = ML + 2*thirds + 8;
+      pdf.text('Tarih', tarihX, fY + 5);
+      pdf.setFont('helvetica','normal'); pdf.setFontSize(9); pdf.setTextColor(30,30,30);
+      const tStr = data.tarih ? new Date(data.tarih+'T00:00:00').toLocaleDateString('tr-TR') : '';
+      if (tStr) {
+        pdf.text(tStr, tarihX, fY + 11);
+      } else {
+        pdf.setDrawColor(170,170,170); pdf.line(tarihX, fY + 13, tarihX + thirds - 12, fY + 13);
+      }
+    }
+
+    function newPage() {
+      if (pageNum > 0) pdf.addPage();
+      pageNum++;
+      drawPageChrome();
+      curCol = 0;
+      curY = contentTop();
+    }
+
+    function nextCol() {
+      curCol++;
+      if (curCol >= COLS) {
+        newPage();
+      } else {
+        curY = contentTop();
+      }
+    }
+
+    // ── Draw section label ──
+    function drawLabel(size) {
+      // Need space for label + at least one room
+      const needed = SECTION_LABEL_H + roomH(size);
+      if (availH() < needed) nextCol();
+
+      const c = COLORS[size];
+      const x = colX();
+      pdf.setFillColor(c[0], c[1], c[2]);
+      pdf.roundedRect(x, curY, COL_W, SECTION_LABEL_H - 1, 1, 1, 'F');
+      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(255,255,255);
+      pdf.text(LABELS[size], x + COL_W/2, curY + 3.6, { align: 'center' });
+      curY += SECTION_LABEL_H;
+    }
+
+    // ── Draw one room ──
+    function drawRoom(size, idx, names) {
+      const rh = roomH(size);
+      if (availH() < rh) nextCol();
+
+      const x = colX(), y = curY;
+      const c = COLORS[size];
+
+      // Outer border
+      pdf.setDrawColor(185,185,185); pdf.setLineWidth(0.25);
+      pdf.roundedRect(x, y, COL_W, rh, 0.8, 0.8, 'S');
+
+      // Room header bg
+      pdf.setFillColor(245,243,240);
+      pdf.rect(x+0.15, y+0.15, COL_W-0.3, ROOM_HEADER_H-0.5, 'F');
+      pdf.setDrawColor(200,200,200); pdf.setLineWidth(0.15);
+      pdf.line(x, y+ROOM_HEADER_H-0.3, x+COL_W, y+ROOM_HEADER_H-0.3);
+
+      // Room number
+      pdf.setFontSize(7); pdf.setFont('helvetica','bold'); pdf.setTextColor(c[0],c[1],c[2]);
+      pdf.text(`Oda ${idx+1}`, x+3, y+3.4);
+
+      // Persons
+      for (let i = 0; i < size; i++) {
+        const ry = y + ROOM_HEADER_H + i * PERSON_ROW_H;
+
+        // Numbered circle
+        pdf.setFillColor(c[0],c[1],c[2]);
+        pdf.circle(x+4, ry+2.8, 1.7, 'F');
+        pdf.setFontSize(5.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(255,255,255);
+        pdf.text(String(i+1), x+4, ry+3.4, { align:'center' });
+
+        // Name text
+        pdf.setFontSize(8); pdf.setFont('helvetica','normal'); pdf.setTextColor(30,30,30);
+        const nm = (names && names[i]) ? names[i] : '';
+        if (nm) {
+          pdf.text(nm, x+8.5, ry+3.5);
+        } else {
+          // Empty line placeholder
+          pdf.setDrawColor(215,215,215); pdf.setLineWidth(0.1);
+          pdf.line(x+8.5, ry+4, x+COL_W-3, ry+4);
+        }
+
+        // Row separator
+        if (i < size - 1) {
+          pdf.setDrawColor(225,225,225); pdf.setLineWidth(0.1);
+          pdf.line(x+2, ry+PERSON_ROW_H, x+COL_W-2, ry+PERSON_ROW_H);
+        }
+      }
+
+      curY += rh + ROOM_GAP;
+    }
+
+    // ═══ Generate pages ═══
+    newPage();
+
+    [2, 3, 4].forEach(size => {
+      const rooms = data.rooms[size] || [];
+      if (rooms.length === 0) return;
+      drawLabel(size);
+      rooms.forEach((names, idx) => drawRoom(size, idx, names));
+    });
+
+    // Page numbers
+    const total = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= total; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(6.5); pdf.setFont('helvetica','normal'); pdf.setTextColor(160,160,160);
+      pdf.text(`Sayfa ${i} / ${total}`, PW/2, PH - 3, { align: 'center' });
+    }
+
+    pdf.save(`Oda_Planlamasi_${(data.kafile||'form').replace(/\s+/g,'_')}.pdf`);
+  } catch(err) {
+    console.error(err);
+    showToast('PDF oluşturulurken hata oluştu.');
+  }
+
+  loading.classList.remove('active');
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => { resizeSig(); initRooms(); });
+window.addEventListener('resize', resizeSig);
+</script>
+</body>
+</html>
