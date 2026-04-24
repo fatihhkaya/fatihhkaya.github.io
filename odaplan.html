@@ -4,269 +4,101 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Oda Planlaması</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
-
-  :root {
-    --bg: #f5f3ef;
-    --card: #ffffff;
-    --border: #c8bfb3;
-    --border-light: #e2ddd6;
-    --text: #2c2520;
-    --text-muted: #7a7068;
-    --accent: #1a6b4a;
-    --accent-light: #e8f5ee;
-    --accent-dark: #134f37;
-    --danger: #c0392b;
-    --header-bg: #1a6b4a;
-    --header-text: #ffffff;
-    --room2: #1a6b4a;
-    --room3: #2c6fbb;
-    --room4: #8b5a2b;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-    --radius: 10px;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Noto Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    -webkit-tap-highlight-color: transparent;
-    padding-bottom: 40px;
-  }
-
-  .top-bar {
-    background: var(--header-bg);
-    color: var(--header-text);
-    padding: 16px 20px;
-    position: sticky; top: 0; z-index: 100;
-    box-shadow: var(--shadow-md);
-  }
-  .top-bar h1 { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
-  .top-bar p { font-size: 12px; opacity: .8; margin-top: 2px; }
-
-  .action-bar {
-    display: flex; gap: 8px; padding: 12px 16px;
-    background: var(--card); border-bottom: 1px solid var(--border-light);
-    position: sticky; top: 68px; z-index: 99;
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
-  }
-  .action-bar::-webkit-scrollbar { display: none; }
-
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 10px 16px; border: none; border-radius: 8px;
-    font-family: inherit; font-size: 13px; font-weight: 600;
-    cursor: pointer; white-space: nowrap; transition: all .15s; flex-shrink: 0;
-  }
-  .btn:active { transform: scale(.96); }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: var(--accent-dark); }
-  .btn-outline { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
-  .btn-danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
-  .btn svg { width: 16px; height: 16px; }
-
-  .container { padding: 16px; max-width: 800px; margin: 0 auto; }
-
-  .meta-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-  .meta-field {
-    background: var(--card); border: 1px solid var(--border-light);
-    border-radius: var(--radius); padding: 10px 14px; box-shadow: var(--shadow);
-  }
-  .meta-field label {
-    display: block; font-size: 11px; font-weight: 600;
-    color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px;
-  }
-  .meta-field input {
-    width: 100%; border: none; outline: none; font-family: inherit;
-    font-size: 15px; font-weight: 500; color: var(--text); background: transparent;
-  }
-
-  .room-type-section { margin-bottom: 20px; }
-  .room-type-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 14px; border-radius: var(--radius); margin-bottom: 10px;
-    color: #fff; font-weight: 700; font-size: 14px;
-  }
-  .room-type-header.type-2 { background: var(--room2); }
-  .room-type-header.type-3 { background: var(--room3); }
-  .room-type-header.type-4 { background: var(--room4); }
-  .room-type-header .count-badge {
-    background: rgba(255,255,255,.25); padding: 3px 10px; border-radius: 20px; font-size: 12px;
-  }
-
-  .add-room-btn {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    width: 100%; padding: 10px; border: 2px dashed var(--border); border-radius: var(--radius);
-    background: transparent; color: var(--text-muted); font-family: inherit;
-    font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: all .15s;
-  }
-  .add-room-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-
-  .room-card {
-    background: var(--card); border: 1px solid var(--border-light);
-    border-radius: var(--radius); margin-bottom: 8px; box-shadow: var(--shadow); overflow: hidden;
-  }
-  .room-card:focus-within { box-shadow: var(--shadow-md); }
-  .room-card-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 12px; font-size: 12px; font-weight: 700; color: #fff;
-    text-transform: uppercase; letter-spacing: .5px;
-  }
-  .room-card-header.type-2 { background: var(--room2); }
-  .room-card-header.type-3 { background: var(--room3); }
-  .room-card-header.type-4 { background: var(--room4); }
-
-  .room-delete-btn {
-    background: rgba(255,255,255,.2); border: none; color: #fff;
-    width: 24px; height: 24px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
-  }
-
-  .room-card-body { padding: 8px 12px 12px; }
-  .person-row {
-    display: flex; align-items: center; gap: 8px;
-    padding: 6px 0; border-bottom: 1px solid var(--border-light);
-  }
-  .person-row:last-child { border-bottom: none; }
-  .person-num {
-    width: 22px; height: 22px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
-  }
-  .person-num.c2 { background: var(--room2); }
-  .person-num.c3 { background: var(--room3); }
-  .person-num.c4 { background: var(--room4); }
-
-  .person-input {
-    flex: 1; border: none; outline: none; font-family: inherit;
-    font-size: 14px; color: var(--text); background: transparent; padding: 4px 0;
-  }
-  .person-input::placeholder { color: var(--border); }
-
-  .footer-section {
-    background: var(--card); border: 1px solid var(--border-light);
-    border-radius: var(--radius); padding: 16px; margin-top: 20px; box-shadow: var(--shadow);
-  }
-  .footer-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-  .footer-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-  .footer-field label {
-    display: block; font-size: 11px; font-weight: 600;
-    color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px;
-  }
-  .footer-field input {
-    width: 100%; border: 1px solid var(--border-light); border-radius: 6px;
-    padding: 8px 10px; font-family: inherit; font-size: 14px; color: var(--text); outline: none;
-  }
-  .footer-field input:focus { border-color: var(--accent); }
-
-  .sig-area { margin-top: 12px; }
-  .sig-area label {
-    display: block; font-size: 11px; font-weight: 600;
-    color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
-  }
-  .sig-canvas-wrap {
-    border: 2px solid var(--border); border-radius: 8px;
-    background: #fafaf8; position: relative; overflow: hidden;
-  }
-  .sig-canvas-wrap canvas { display: block; width: 100%; touch-action: none; }
-  .sig-clear {
-    position: absolute; top: 8px; right: 8px;
-    background: var(--card); border: 1px solid var(--border); border-radius: 6px;
-    padding: 4px 10px; font-size: 11px; font-weight: 600; color: var(--text-muted); cursor: pointer;
-  }
-
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
-    z-index: 200; align-items: center; justify-content: center; padding: 20px;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal-box {
-    background: var(--card); border-radius: 16px; padding: 24px;
-    width: 100%; max-width: 400px; text-align: center;
-  }
-  .modal-box h3 { margin-bottom: 8px; font-size: 18px; }
-  .modal-box p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
-  .modal-actions { display: flex; gap: 10px; justify-content: center; }
-
-  .loading-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(255,255,255,.85);
-    z-index: 300; align-items: center; justify-content: center; flex-direction: column; gap: 12px;
-  }
-  .loading-overlay.active { display: flex; }
-  .spinner {
-    width: 36px; height: 36px; border: 3px solid var(--border-light);
-    border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  :root{--bg:#f5f3ef;--card:#fff;--border:#c8bfb3;--border-light:#e2ddd6;--text:#2c2520;--text-muted:#7a7068;--accent:#1a6b4a;--accent-light:#e8f5ee;--accent-dark:#134f37;--danger:#c0392b;--header-bg:#1a6b4a;--room2:#1a6b4a;--room3:#2c6fbb;--room4:#8b5a2b;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 12px rgba(0,0,0,.1);--radius:10px}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-tap-highlight-color:transparent;padding-bottom:40px}
+  .top-bar{background:var(--header-bg);color:#fff;padding:16px 20px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-md)}
+  .top-bar h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+  .top-bar p{font-size:12px;opacity:.8;margin-top:2px}
+  .action-bar{display:flex;gap:8px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border-light);position:sticky;top:68px;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .action-bar::-webkit-scrollbar{display:none}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+  .btn:active{transform:scale(.96)}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+  .btn-danger{background:transparent;color:var(--danger);border:1.5px solid var(--danger)}
+  .btn svg{width:16px;height:16px}
+  .container{padding:16px;max-width:800px;margin:0 auto}
+  .meta-section{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .meta-field{background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius);padding:10px 14px;box-shadow:var(--shadow)}
+  .meta-field label{display:block;font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .meta-field input{width:100%;border:none;outline:none;font-family:inherit;font-size:15px;font-weight:500;color:var(--text);background:transparent}
+  .room-type-section{margin-bottom:20px}
+  .room-type-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:var(--radius);margin-bottom:10px;color:#fff;font-weight:700;font-size:14px}
+  .room-type-header.type-2{background:var(--room2)}
+  .room-type-header.type-3{background:var(--room3)}
+  .room-type-header.type-4{background:var(--room4)}
+  .room-type-header .count-badge{background:rgba(255,255,255,.25);padding:3px 10px;border-radius:20px;font-size:12px}
+  .add-room-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px;border:2px dashed var(--border);border-radius:var(--radius);background:transparent;color:var(--text-muted);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px}
+  .room-card{background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:8px;box-shadow:var(--shadow);overflow:hidden}
+  .room-card-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+  .room-card-header.type-2{background:var(--room2)}
+  .room-card-header.type-3{background:var(--room3)}
+  .room-card-header.type-4{background:var(--room4)}
+  .room-delete-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+  .room-card-body{padding:8px 12px 12px}
+  .person-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border-light)}
+  .person-row:last-child{border-bottom:none}
+  .person-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+  .person-num.c2{background:var(--room2)}
+  .person-num.c3{background:var(--room3)}
+  .person-num.c4{background:var(--room4)}
+  .person-input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--text);background:transparent;padding:4px 0}
+  .person-input::placeholder{color:var(--border)}
+  .footer-section{background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px;margin-top:20px;box-shadow:var(--shadow)}
+  .footer-section h3{font-size:14px;font-weight:700;margin-bottom:12px}
+  .footer-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .footer-field label{display:block;font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .footer-field input{width:100%;border:1px solid var(--border-light);border-radius:6px;padding:8px 10px;font-family:inherit;font-size:14px;color:var(--text);outline:none}
+  .sig-area{margin-top:12px}
+  .sig-area label{display:block;font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .sig-canvas-wrap{border:2px solid var(--border);border-radius:8px;background:#fafaf8;position:relative;overflow:hidden}
+  .sig-canvas-wrap canvas{display:block;width:100%;touch-action:none}
+  .sig-clear{position:absolute;top:8px;right:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--text-muted);cursor:pointer}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+  .modal-overlay.active{display:flex}
+  .modal-box{background:var(--card);border-radius:16px;padding:24px;width:100%;max-width:400px;text-align:center}
+  .modal-box h3{margin-bottom:8px;font-size:18px}
+  .modal-box p{color:var(--text-muted);font-size:14px;margin-bottom:20px}
+  .modal-actions{display:flex;gap:10px;justify-content:center}
+  .loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:300;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+  .loading-overlay.active{display:flex}
+  .spinner{width:36px;height:36px;border:3px solid var(--border-light);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <h1>ODA PLANLAMASI</h1>
-  <p>Hac / Umre Konaklama Formu</p>
-</div>
+<div class="top-bar"><h1>Fatih Kaya Hayratı | ODA PLANLAMASI</h1><p>Hac / Umre Konaklama Formu</p></div>
 
 <div class="action-bar">
-  <button class="btn btn-primary" onclick="exportPDF()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
-    PDF İndir
-  </button>
-  <button class="btn btn-outline" onclick="saveData()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-    Kaydet
-  </button>
-  <button class="btn btn-outline" onclick="loadData()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-    Yükle
-  </button>
-  <button class="btn btn-danger" onclick="confirmClear()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-    Temizle
-  </button>
+  <button class="btn btn-primary" onclick="exportPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>PDF İndir</button>
+  <button class="btn btn-outline" onclick="saveData()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Kaydet</button>
+  <button class="btn btn-outline" onclick="loadData()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Yükle</button>
+  <button class="btn btn-danger" onclick="confirmClear()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Temizle</button>
 </div>
 
 <div class="container" id="main-form">
   <div class="meta-section">
-    <div class="meta-field">
-      <label>Kafile</label>
-      <input type="text" id="kafile" placeholder="Kafile adı...">
-    </div>
-    <div class="meta-field">
-      <label>Grup</label>
-      <input type="text" id="grup" placeholder="Grup adı...">
-    </div>
+    <div class="meta-field"><label>Kafile</label><input type="text" id="kafile" placeholder="Kafile adı..."></div>
+    <div class="meta-field"><label>Grup</label><input type="text" id="grup" placeholder="Grup adı..."></div>
   </div>
 
   <div class="room-type-section" id="section-2">
-    <div class="room-type-header type-2">
-      <span>2 Kişilik Oda</span>
-      <span class="count-badge" id="count-2">8 Oda</span>
-    </div>
+    <div class="room-type-header type-2"><span>2 Kişilik Oda</span><span class="count-badge" id="count-2">8 Oda</span></div>
     <div id="rooms-2"></div>
     <button class="add-room-btn" onclick="addRoom(2)">+ Oda Ekle</button>
   </div>
-
   <div class="room-type-section" id="section-3">
-    <div class="room-type-header type-3">
-      <span>3 Kişilik Oda</span>
-      <span class="count-badge" id="count-3">7 Oda</span>
-    </div>
+    <div class="room-type-header type-3"><span>3 Kişilik Oda</span><span class="count-badge" id="count-3">7 Oda</span></div>
     <div id="rooms-3"></div>
     <button class="add-room-btn" onclick="addRoom(3)">+ Oda Ekle</button>
   </div>
-
   <div class="room-type-section" id="section-4">
-    <div class="room-type-header type-4">
-      <span>4 Kişilik Oda</span>
-      <span class="count-badge" id="count-4">7 Oda</span>
-    </div>
+    <div class="room-type-header type-4"><span>4 Kişilik Oda</span><span class="count-badge" id="count-4">7 Oda</span></div>
     <div id="rooms-4"></div>
     <button class="add-room-btn" onclick="addRoom(4)">+ Oda Ekle</button>
   </div>
@@ -274,375 +106,197 @@
   <div class="footer-section">
     <h3>Yetkili Bilgileri</h3>
     <div class="footer-fields">
-      <div class="footer-field">
-        <label>Din Görevlisi Adı Soyadı</label>
-        <input type="text" id="din-gorevlisi" placeholder="Ad Soyad...">
-      </div>
-      <div class="footer-field">
-        <label>Tarih</label>
-        <input type="date" id="tarih">
-      </div>
+      <div class="footer-field"><label>Din Görevlisi Adı Soyadı</label><input type="text" id="din-gorevlisi" placeholder="Ad Soyad..."></div>
+      <div class="footer-field"><label>Tarih</label><input type="date" id="tarih"></div>
     </div>
     <div class="sig-area">
       <label>İmza</label>
-      <div class="sig-canvas-wrap">
-        <canvas id="sig-canvas" height="150"></canvas>
-        <button class="sig-clear" onclick="clearSig()">Temizle</button>
-      </div>
+      <div class="sig-canvas-wrap"><canvas id="sig-canvas" height="150"></canvas><button class="sig-clear" onclick="clearSig()">Temizle</button></div>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="clear-modal">
-  <div class="modal-box">
-    <h3>Formu Temizle</h3>
-    <p>Tüm bilgiler silinecek. Devam etmek istiyor musunuz?</p>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeModal()">İptal</button>
-      <button class="btn btn-danger" onclick="clearAll()" style="border:none;background:var(--danger);color:#fff;">Temizle</button>
-    </div>
-  </div>
-</div>
+<div class="modal-overlay" id="clear-modal"><div class="modal-box"><h3>Formu Temizle</h3><p>Tüm bilgiler silinecek. Devam etmek istiyor musunuz?</p><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">İptal</button><button class="btn btn-danger" onclick="clearAll()" style="border:none;background:var(--danger);color:#fff">Temizle</button></div></div></div>
 
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <span style="font-size:14px;color:var(--text-muted);">PDF hazırlanıyor...</span>
-</div>
+<div class="loading-overlay" id="loading"><div class="spinner"></div><span style="font-size:14px;color:var(--text-muted)">PDF hazırlanıyor...</span></div>
 
 <script>
-// ═══════════════════════════════════════
-// FORM LOGIC
-// ═══════════════════════════════════════
-let roomCounters = { 2: 0, 3: 0, 4: 0 };
+// ===== EMBEDDED TURKISH FONTS =====
+const FONT_REGULAR = "AAEAAAAPAIAAAwBwR0RFRgEuAWUAACB8AAAAKEdQT1MFGhrIAAAgpAAADUxHU1VCl1aplgAALfAAAAD0TUFUSCOrYAQAAC7kAAABdE9TLzJp/3BqAAAdeAAAAFZjbWFwCLUG8AAAHdAAAACsZ2FzcAAHAAcAACBwAAAADGdseWaZg9jEAAAA/AAAGYRoZWFkJ1lMTwAAG3gAAAA2aGhlYQ2fB9UAAB1UAAAAJGhtdHjcBzJcAAAbsAAAAaRsb2NhYclbQQAAGqAAAADWbWF4cACqA8EAABqAAAAAIG5hbWUn7T2+AAAefAAAAdRwb3N0/9sAWgAAIFAAAAAgAAIBNQAAAgAF1QADAAkAACUzFSMRMxEDIwMBNcvLyxSiFf7+BdX9cf6bAWUAAgDFA6oC6QXVAAMABwAAAREjESERIxEBb6oCJKoF1f3VAiv91QIrAAEAxQOqAW8F1QADAAABESMRAW+qBdX91QIrAAABALD+8gJ7BhIADQAAAQYCFRQSFyMmAjU0EjcCe4aCg4WglpWUlwYS5v4+5+f+O+XrAcbg3wHE7AAAAQCk/vICbwYSAA0AABMzFhIVFAIHIzYSNTQCpKCWlZWWoIWDgwYS7P483+D+OuvlAcXn5wHCAAABAJ7/EgHDAP4ABQAANzMVAyMT8NOkgVL+rP7AAUAAAAEAZAHfAn8CgwADAAATIRUhZAIb/eUCg6QAAQDbAAABrgD+AAMAADczFSPb09P+/gAAAQAA/0ICsgXVAAMAAAEzASMCCKr9+KoF1fltAAIAh//jBI8F8AALABcAAAEiAhEQEjMyEhEQAicyABEQACMiABEQAAKLnJ2dnJ2dnZ37AQn+9/v7/vcBCQVQ/s3+zP7N/s0BMwEzATQBM6D+c/6G/of+cwGNAXkBegGNAAEA4QAABFoF1QAKAAA3IREFNSUzESEVIf4BSv6ZAWXKAUr8pKoEc0i4SPrVqgABAJYAAARKBfAAHAAAJSEVITU2ADc+ATU0JiMiBgc1PgEzMgQVFAYHBgABiQLB/ExzAY0zYU2nhl/TeHrUWOgBFEVbGf70qqqqdwGROm2XSXeWQkPMMTLowlylcB3+6wABAJz/4wRzBfAAKAAAAR4BFRQEISImJzUeATMyNjU0JisBNTMyNjU0JiMiBgc1PgEzMgQVFAYDP5Gj/tD+6F7HalTIbb7HuaWutpWeo5hTvnJzyVnmAQyOAyUfxJDd8iUlwzEylo+ElaZ3cHN7JCa0ICDRsnyrAAACAGQAAASkBdUAAgANAAAJASEDMxEzFSMRIxEhNQMG/gIB/jX+1dXJ/V4FJfzjA838M6j+oAFgwwAAAQCe/+MEZAXVAB0AABMhFSERPgEzMgAVFAAhIiYnNR4BMzI2NTQmIyIGB90DGf2gLFgs+gEk/tT+717DaFrAa63Kyq1RoVQF1ar+kg8P/u7q8f71ICDLMTC2nJy2JCYAAgCP/+MElgXwAAsAJAAAASIGFRQWMzI2NTQmARUuASMiAgM+ATMyABUUACMgABEQACEyFgKkiJ+fiIifnwEJTJtMyNMPO7Jr4QEF/vDi/v3+7gFQARtMmwM7uqKhu7uhoroCebgkJv7y/u9XXf7v6+b+6gGNAXkBYgGlHgAAAQCoAAAEaAXVAAYAABMhFQEjASGoA8D94tMB/v0zBdVW+oEFKwADAIv/4wSLBfAACwAjAC8AAAEiBhUUFjMyNjU0JiUuATU0JDMyFhUUBgceARUUBCMiJDU0NhMUFjMyNjU0JiMiBgKLkKWlkJCmpf6lgpEA/97f/pGBkqP+9/f3/vekSJGDgpOTgoORAsWah4eam4aHmlYgsoCz0NCzgLIgIsaP2ejo2Y/GAWF0goJ0dIKCAAACAIH/4wSHBfAAGAAkAAA3NR4BMzISEw4BIyIANTQAMyAAERAAISImATI2NTQmIyIGFRQW4UycS8jTDzqybOD++wEQ4gEDARH+sf7lTJwBPoifn4iIn58fuCQmAQ0BElZcAQ/r5gEW/nP+hv6f/lseApe6oqG7u6GiugAAAgDwAAABwwQjAAMABwAANzMVIxEzFSPw09PT0/7+BCP+AAIAnv8SAcMEIwADAAkAABMzFSMRMxUDIxPw09PTpIFSBCP+/dms/sABQAAAAgCTAAADsAXwAAMAJAAAJTMVIxMjNTQ2PwE+ATU0JiMiBgc1PgEzMhYVFAYPAQ4BBw4BFQGHy8vFvzhaWjkzg2xPs2FewWe430haWC8nCAYG/v4BkZplglZZNV4xWW5GQ7w5OMKfTIlWVi81GRU8NAAAAgAQAAAFaAXVAAIACgAACQEhATMBIwMhAyMCvP7uAiX+e+UCOdKI/V+I1QUO/RkDrvorAX/+gQADAMkAAATsBdUACAARACAAAAERITI2NTQmIwERITI2NTQmIyUhMhYVFAYHHgEVFAQjIQGTAUSjnZ2j/rwBK5SRkZT+CwIE5/qAfJWl/vD7/egCyf3dh4uMhQJm/j5vcnFwpsCxiaIUIMuYyNoAAAEAc//jBScF8AAZAAABFS4BIyAAERAAITI2NxUOASMgABEQACEyFgUnZueC/wD+8AEQAQCC52Zq7YT+rf56AYYBU4btBWLVX17+x/7Y/tn+x15f00hIAZ8BZwFoAZ9HAAIAyQAABbAF1QAIABEAAAERMyAAERAAISUhIAAREAApAQGT9AE1AR/+4f7L/kIBnwGyAZb+aP5Q/mEFL/t3ARgBLgEsARem/pf+gP5+/pYAAQDJAAAEiwXVAAsAABMhFSERIRUhESEVIckDsP0aAsf9OQL4/D4F1ar+Rqr946oAAQDJAAAEIwXVAAkAABMhFSERIRUhESPJA1r9cAJQ/bDKBdWq/kiq/TcAAQBz/+MFiwXwAB0AACURITUhEQYEIyAAERAAITIEFxUuASMgABEQACEyNgTD/rYCEnX+5qD+ov51AYsBXpIBB29w/Iv+7v7tARMBEmuo1QGRpv1/U1UBmQFtAW4BmUhG119g/s7+0f7S/s4lAAABAMkAAAU7BdUACwAAEzMRIREzESMRIREjycoC3srK/SLKBdX9nAJk+isCx/05AAABAMkAAAGTBdUAAwAAEzMRI8nKygXV+isAAAH/lv5mAZMF1QALAAATMxEQBisBNTMyNjXJys3jTT+GbgXV+pP+8vSqlsIAAQDJAAAFagXVAAoAABMzEQEhCQEhAREjycoCngEE/RsDGv72/TPKBdX9iQJ3/Uj84wLP/TEAAQDJAAAEagXVAAUAABMzESEVIcnKAtf8XwXV+tWqAAABAMkAAAYfBdUADAAAEyEJASERIxEBIwERI8kBLQF9AX8BLcX+f8v+f8QF1fwIA/j6KwUf/AAEAPrhAAABAMkAAAUzBdUACQAAEyEBETMRIQERI8kBEAKWxP7w/WrEBdX7HwTh+isE4fsfAAACAHP/4wXZBfAACwAXAAABIgAREAAzMgAREAAnIAAREAAhIAAREAADJ9z+/QED3NwBAf7/3AE6AXj+iP7G/sX+hwF5BUz+uP7l/ub+uAFIARoBGwFIpP5b/p7+n/5bAaQBYgFiAaUAAAIAyQAABI0F1QAIABMAAAERMzI2NTQmIyUhMgQVFAQrAREjAZP+jZqajf44Acj7AQH+//v+ygUv/c+Sh4aSpuPb3eL9qAACAHP++AXZBfAACwAdAAABIgAREAAzMgAREAATASMnDgEjIAAREAAhIAAREAIDJ9z+/QED3NwBAf7/PwEK9N0hIxD+xf6HAXkBOwE6AXjRBUz+uP7l/ub+uAFIARoBGwFI+s/+3e8CAgGlAWEBYgGl/lv+nv78/o4AAAIAyQAABVQF1QATABwAAAEeARcTIwMuASsBESMRISAWFRQGAREzMjY1NCYjA41Bez7N2b9Ki3jcygHIAQD8g/2J/pKVlZICvBaQfv5oAX+WYv2JBdXW2I26Ak/97oeDg4UAAQCH/+MEogXwACcAAAEVLgEjIgYVFBYfAR4BFRQEISImJzUeATMyNjU0Ji8BLgE1NCQzMhYESHPMX6Wzd6Z64tf+3f7nau+Ae+xyrbyHmnviygEX9WnaBaTFNzaAdmNlHxkr2bbZ4DAv0EVGiH5ufB8YLcCrxuQmAAAB//oAAATpBdUABwAAAyEVIREjESEGBO/97sv97gXVqvrVBSsAAAEAsv/jBSkF1QARAAATMxEUFjMyNjURMxEQACEgABGyy67Dwq7L/t/+5v7l/t8F1fx18NPT8AOL/Fz+3P7WASoBJAAAAQAQAAAFaAXVAAYAACEBMwkBMwECSv3G0wHZAdrS/ccF1fsXBOn6KwAAAQBEAAAHpgXVAAwAABMzCQEzCQEzASMJASNEzAE6ATnjAToBOc3+if7+xf7C/gXV+xIE7vsSBO76KwUQ+vAAAAEAPQAABTsF1QALAAATMwkBMwkBIwkBIwGB2QFzAXXZ/iACANn+XP5Z2gIVBdX91QIr/TP8+AJ7/YUDHQAAAf/8AAAE5wXVAAgAAAMzCQEzAREjEQTZAZ4Bm9n98MsF1f2aAmb88v05AscAAAEAXAAABR8F1QAJAAATIRUBIRUhNQEhcwSV/FADx/s9A7D8ZwXVmvtvqpoEkQAB/+z+HQQU/qwAAwAAARUhNQQU+9j+rI+PAAIAe//jBC0EewAKACUAAAEiBhUUFjMyNj0BNxEjNQ4BIyImNTQ2MyE1NCYjIgYHNT4BMzIWAr7frIFvmbm4uD+8iKzL/fsBAqeXYLZUZb5a8/ACM2Z7YnPZtClM/YGqZmHBor3AEn+LLi6qJyf8AAACALr/4wSkBhQACwAcAAABNCYjIgYVFBYzMjYBPgEzMgAREAIjIiYnFSMRMwPlp5KSp6eSkqf9jjqxe8wA///Me7E6ubkCL8vn58vL5+cCUmRh/rz++P74/rxhZKgGFAABAHH/4wPnBHsAGQAAARUuASMiBhUUFjMyNjcVDgEjIgAREAAhMhYD506dULPGxrNQnU5NpV39/tYBLQEGVaIENawrK+PNzeMrK6okJAE+AQ4BEgE6IwAAAgBx/+MEWgYUABAAHAAAAREzESM1DgEjIgIREAAzMhYBFBYzMjY1NCYjIgYDori4OrF8y/8A/8t8sf3Hp5KSqKiSkqcDtgJe+eyoZGEBRAEIAQgBRGH+Fcvn58vL5+cAAgBx/+MEfwR7ABQAGwAAARUhHgEzMjY3FQ4BIyAAERAAMzIABy4BIyIGBwR//LIMzbdqx2Jj0Gv+9P7HASn84gEHuAKliJq5DgJeWr7HNDSuKiwBOAEKARMBQ/7dxJe0rp4AAAEALwAAAvgGFAATAAABFSMiBh0BIRUhESMRIzUzNTQ2MwL4sGNNAS/+0bmwsK69BhSZUGhjj/wvA9GPTrurAAACAHH+VgRaBHsACwAoAAABNCYjIgYVFBYzMjYXEAIhIiYnNR4BMzI2PQEOASMiAhEQEjMyFhc1MwOipZWUpaWUlaW4/v76YaxRUZ5StbQ5snzO/PzOfLI5uAI9yNzcyMfc3Ov+4v7pHR6zLCq9v1tjYgE6AQMBBAE6YmOqAAABALoAAARkBhQAEwAAAREjETQmIyIGFREjETMRPgEzMhYEZLh8fJWsublCs3XBxgKk/VwCnp+evqT9hwYU/Z5lZO8AAAIAwQAAAXkGFAADAAcAABMzESMRMxUjwbi4uLgEYPugBhTpAAL/2/5WAXkGFAALAA8AABMzERQGKwE1MzI2NREzFSPBuKO1RjFpTLi4BGD7jNbAnGGZBijpAAEAugAABJwGFAAKAAATMxEBMwkBIwERI7q5AiXr/a4Ca/D9x7kGFPxpAeP99P2sAiP93QABAMEAAAF5BhQAAwAAEzMRI8G4uAYU+ewAAAEAugAABx0EewAiAAABPgEzMhYVESMRNCYjIgYVESMRNCYjIgYVESMRMxU+ATMyFgQpRcCCr765cnWPprlyd42mubk/sHl6qwOJfHb14v1cAp6hnL6k/YcCnqKbv6P9hwRgrmdifAAAAQC6AAAEZAR7ABMAAAERIxE0JiMiBhURIxEzFT4BMzIWBGS4fHyVrLm5QrN1wcYCpP1cAp6fnr6k/YcEYK5lZO8AAgBx/+MEdQR7AAsAFwAAASIGFRQWMzI2NTQmJzIAERAAIyIAERAAAnOUrKuVk6ysk/ABEv7u8PH+7wERA9/nycnn6MjH6Zz+yP7s/u3+xwE5ARMBFAE4AAIAuv5WBKQEewAQABwAACURIxEzFT4BMzIAERACIyImATQmIyIGFRQWMzI2AXO5uTqxe8wA///Me7ECOKeSkqenkpKnqP2uBgqqZGH+vP74/vj+vGEB68vn58vL5+cAAAIAcf5WBFoEewALABwAAAEUFjMyNjU0JiMiBgEOASMiAhEQADMyFhc1MxEjAS+nkpKoqJKSpwJzOrF8y/8A/8t8sTq4uAIvy+fny8vn5/2uZGEBRAEIAQgBRGFkqvn2AAEAugAAA0oEewARAAABLgEjIgYVESMRMxU+ATMyFhcDSh9JLJynubk6uoUTLhwDtBIRy779sgRgrmZjBQUAAQBv/+MDxwR7ACcAAAEVLgEjIgYVFBYfAR4BFRQGIyImJzUeATMyNjU0Ji8BLgE1NDYzMhYDi06oWomJYpQ/xKX32FrDbGbGYYKMZatAq5jgzma0BD+uKChUVEBJIQ4qmYmctiMjvjU1WVFLUCUPJJWCnqweAAEANwAAAvIFngATAAABESEVIREUFjsBFSMiJjURIzUzEQF3AXv+hUtzvb3VooeHBZ7+wo/9oIlOmp/SAmCPAT4AAAIArv/jBFgEewATABQAABMRMxEUFjMyNjURMxEjNQ4BIyImAa64fHyVrbi4Q7F1wcgBzwG6Aqb9YZ+fvqQCe/ugrGZj8AOoAAEAPQAABH8EYAAGAAATMwkBMwEjPcMBXgFew/5c+gRg/FQDrPugAAABAFYAAAY1BGAADAAAEzMbATMbATMBIwsBI1a45uXZ5uW4/tvZ8fLZBGD8lgNq/JYDavugA5b8agAAAQA7AAAEeQRgAAsAAAkCIwkBIwkBMwkBBGT+awGq2f66/rrZAbP+ctkBKQEpBGD93/3BAbj+SAJKAhb+cQGPAAEAPf5WBH8EYAAPAAAFDgErATUzMjY/AQEzCQEzApNOlHyTbExUMyH+O8MBXgFew2jIeppIhlQETvyUA2wAAQBYAAAD2wRgAAkAABMhFQEhFSE1ASFxA2r9TAK0/H0CtP1lBGCo/NuTqAMlAAIA1wVGAykGEAADAAcAAAEzFSMlMxUjAl7Ly/55y8sGEMrKygAAAQEj/nUCwQAAABMAACEeARUUBiMiJic1HgEzMjY1NCYnAlQ3Nnh2LlcrIkovOzwrLT5pMFlbDAyDEQ8wLh5XPQD//wBz/nUFJwXwEiYAGgAAEAcATgEtAAD//wBz/+MF2QdOEiYAJgAAEAcAZwUnAXX//wCy/+MFKQdOEiYALAAAEAcAZwTuAXX//wBx/nUD5wR7EiYANQAAEAcATgCPAAD//wBx/+MEdQYQEiYAQQAAEAYATXMA//8Arv/jBFgGEBImAEcAABAGAE17AP//AHP/4wWLB20SJgAeAAAQBwBoBRsBdf//AHH+VgRaBkgSJgA5AAAQBwBbAIsAAP//AMkAAAGVB1ASJgAgAAAQBwBpAy8BdQACAMEAAAF5BHsAAwAEAAATMxEjE8G4uFwEYPugBHsA//8Ah/51BKIF8BImACoAABAHAE4AiwAA//8Ab/51A8cEexImAEUAABAGAE4XAAABAMcFKQM5BkgADQAAEzMeATMyNjczDgEjIibHdgthV1ZgDXYKnpGRngZIS0tKTI+QkAAAAQCw/fwDUAeSAAsAAAEjNRATEhMzAAMCEQFzw6C6pqD+/Fp//fzqA5cB4gIwAQP98/6G/e787QABALD9/AFzB4kAAwAAEzMRI7DDwweJ9nMAAAEAsP4UA1AHiQALAAABFRATEhMjAgMCETUBc3+Ty6DQkKAHier8pf5X/hT+ZQFFAe4CJgMy6gAAAQCw/fwDUAeSAAsAAAE1EAMCATMSExIRFQKNf1r+/KCmuqD9/OoDEwISAXkCDv79/dD+Hvxp6gABAo39/ANQB4kABAAAAREjETADUMMHifZzCY0AAQCw/hQDUAeJAAsAAAEzFRADAgMjEhMSEQKNw6CQ0KDLk38Hier8zf3b/hL+uwGbAewBqQNbAAABAC8AAAWqBhQAJAAAARUjIgYdASEVIREjESERIxEjNTM1NDY7ARUjIgcGHQEhNTQ2MwWqsGNNAS/+0bn+B7mwsK69rrBjJyYB+a69BhSZUGhjj/wvA9H8LwPRj067q5koKGhjTrurAAIALwAABEoGFAAVABkAAAERIxEhESMRIzUzNTQ2OwEVIyIGHQEBMxUjBEq5/ge5sLCts7mwY00B+bm5BGD7oAPR/C8D0Y9Ot6+ZUGhjAbLpAAABAC8AAARKBhQAFQAAASERIxEhIgYdASEVIREjESM1MzU0NgJKAgC5/rdjTQEv/tG5sLCuBhT57AV7UGhjj/wvA9GPTrurAAACAC8AAAb8BhQAKQAtAAABFSMiBwYdASE1NDc2NzY7ARUjIgYdASERIxEhESMRIREjESM1MzU0NjMFMxUjAviwYycmAflXHCdOg66wY00Csrn+B7n+B7mwsK69A/m5uQYUmSgoaGNOu1UcEyeZUGhj+6AD0fwvA9H8LwPRj067qwLpAAABAC8AAAb8BhQAJgAAARUjIgcGHQEhNTQ2MyERIxEhIgYdASEVIREjESERIxEjNTM1NDYzAviwYycmAfmuvQIAuf63Y00BL/7Ruf4HubCwrr0GFJkoKGhjTrur+ewFe1BoY4/8LwPR/C8D0Y9Ou6sAAvzXBQ7/KQXZAAMABwAAATMVIyUzFSP+XsvL/nnLywXZy8vLAAAB/McFBv85BfgADQAAATMeATMyNjczDgEjIib8x3YNY1NSYRB2CqCPkJ8F+DY5Nzh3e3oAAf2aBQ7+ZgXbAAMAAAEzFSP9mszMBdvNAAABAAAAagNUACsAaAAMAAEAAAAAAAAAAAAAAAAACAAEAAAAAAAAABYAKgA4AFUAcQCBAI4AmgCoANgA7wEfAVsBeAGoAecB+gJCAoACkQKnAuAC/AMzA2MDiwOjA7gD7wQHBBQEKgRFBFUEcwSLBL8E4gUfBVAFjQWgBcIF1wX3BhYGLQZEBlEGiQa5BuUHFQdHB2cHpgfIB9oH9QgPCBwIUAhxCJ0IzQj9CRwJVwl4CZwJsAnNCe0KDAojCjYKVwpjCm8KewqHCpIKnQqpCrUKwQrRCt0K6AsCCx4LKwtHC2MLcQuNC8EL6gwODFAMiAybDLUMwgAAAAEAAAACXrhJfdXWXw889QAfCAAAAAAA4PrROQAAAADg+tE599b8TA5ZCdwAAAAIAAIAAAAAAAAEzQBmAosAAAM1ATUDrgDFAjMAxQMfALADHwCkAosAngLjAGQCiwDbArIAAAUXAIcFFwDhBRcAlgUXAJwFFwBkBRcAngUXAI8FFwCoBRcAiwUXAIECsgDwArIAngQ/AJMFeQAQBX0AyQWWAHMGKQDJBQ4AyQSaAMkGMwBzBgQAyQJcAMkCXP+WBT8AyQR1AMkG5wDJBfwAyQZMAHME0wDJBkwAcwWPAMkFFACHBOP/+gXbALIFeQAQB+kARAV7AD0E4//8BXsAXAQA/+wE5wB7BRQAugRmAHEFFABxBOwAcQLRAC8FFABxBRIAugI5AMECOf/bBKIAugI5AMEHywC6BRIAugTlAHEFFAC6BRQAcQNKALoEKwBvAyMANwUSAK4EvAA9BosAVgS8ADsEvAA9BDMAWAQAANcEAAEjBZYAcwZMAHMF2wCyBGYAcQTlAHEFEgCuBjMAcwUUAHECXADJAjkAwQUUAIcEKwBvBAAAxwQAALAEAACwBAAAsAQAALAEAAKNBAAAsAWDAC8FCgAvBQoALwe8AC8HvAAvAAD81/zH/ZoAAQAAB23+HQAADv731vpRDlkAAQAAAAAAAAAAAAAAAAAAAGgAAQQOAZAABQAABTMFmQAAAR4FMwWZAAAD1wBmAhIAAAILBgMDCAQCAgQAAAAHAAAAAAAAAAAAAAAAUGZFZABAACABXwYU/hQBmgdtAeMAAAABAAAAAAAAAAAAAgAAAAMAAAAUAAMAAQAAABQABACYAAAAIgAgAAQAAgAiACkAOwA/AFoAXwB6AMcA1gDcAOcA9gD8AR8BMQFf//8AAAAgACcALAA/AEEAXwBhAMcA1gDcAOcA9gD8AR4BMAFe////4f/d/9v/2P/X/9P/0v+I/3r/df9r/13/WP83/yf++wABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAWgADAAEECQAAATAAAAADAAEECQABABYBMAADAAEECQACAAgBRgADAAEECQADABYBMAADAAEECQAEABYBMAADAAEECQAFABgBTgADAAEECQAGABQBZgBDAG8AcAB5AHIAaQBnAGgAdAAgACgAYwApACAAMgAwADAAMwAgAGIAeQAgAEIAaQB0AHMAdAByAGUAYQBtACwAIABJAG4AYwAuACAAQQBsAGwAIABSAGkAZwBoAHQAcwAgAFIAZQBzAGUAcgB2AGUAZAAuAAoAQwBvAHAAeQByAGkAZwBoAHQAIAAoAGMAKQAgADIAMAAwADYAIABiAHkAIABUAGEAdgBtAGoAbwBuAGcAIABCAGEAaAAuACAAQQBsAGwAIABSAGkAZwBoAHQAcwAgAFIAZQBzAGUAcgB2AGUAZAAuAAoARABlAGoAYQBWAHUAIABjAGgAYQBuAGcAZQBzACAAYQByAGUAIABpAG4AIABwAHUAYgBsAGkAYwAgAGQAbwBtAGEAaQBuAAoARABlAGoAYQBWAHUAIABTAGEAbgBzAEIAbwBvAGsAVgBlAHIAcwBpAG8AbgAgADIALgAzADcARABlAGoAYQBWAHUAUwBhAG4AcwADAAAAAAAA/9gAWgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAIAAL//wADAAEAAAAMAAAAAAAAAAIABAABAEwAAQBPAFoAAQBcAGEAAQBiAGYAAgABAAAACgAuADwAAkRGTFQADmxhdG4AGAAEAAAAAP//AAAABAAAAAD//wABAAAAAWtlcm4ACAAAAAEAAAABAAQAAgAAAAEACAACC3wABAAAC84MWAAiACsAAAAAAAAAAP/T/7cAAAAAAAAASwByADkASwAA/0QAAP+I/63/mv8NAAAAAAAAAAAAAAAAAAAAAAAAAAAAJgAAAAAAAAAA/8kAAAAA/9wAAAAmAAAASwAA/9P/3P/cADkAAP/cAAAAAP/cAAD/3P/cAAD/YQAA/33/kAAA/2EAAAAA/9z/3P/c/7cAAAAAAAAAAP/cAAAAAP/cAAD/iP+tAAD/df/c/9wAAP/cAAAAAAAAAAAAAAAA/9wAAAAA/9wAAP/cAAD/3AAAAAD/wf+3AAD/kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9wAAAAA/9wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9wAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9wAAAAA/5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP63/2H/RAAAAAAAAAAAAAAAAAAAAAD/3P/cAAAAAAAAAAAAAAAA/0QAAAAA/5AAAAAA/2sAAAAA/7f/awAAAAD/kAAAAAAAAP9EAAD/t/+QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/7cAAAAAAAAAAP+aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/twAAAAD/3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8pAAAAAP/cAAD/kAAAAAAAAAAA/5AAAAAA/2H/yQAA/7cAAP+3AAD/3AAAAAD/mgAAAAAAAAAAAAD/mgAAAAAAAP+aAAAAAAAA/2v/kP+a/5oAAAAA/9wAAAAAAC8AAAAAAAAAAAAAAAD/twAAAAD+5v+a/x//RAAA/vAAAAAAAAAAAP/cAAAAAAAAAAAAAP/cAAAAAAAA/9wAAAAAAAD/RAAA/9z/3AAAAAAAOf+t/9z/3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/3AAA/33/kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/T/sEAAP99AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/TAAD/pAAAAAD/twAAAAD/0wAA/9z/t//c/9wAAP/cAAAAAAAAAAAAAP+3/9wAAAAAADkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/rf+3/8H/rQAA/5oAAAAAAAAAAAAAAAAAAP9rAAD/kP+tAAD/fQAA/9MAAAAA/6QAAAAAAAAAAAAA/6QAAAAAAAD/pAAAAAAAAP+Q/5r/pP+kAAAAAAAAAAAAAAAmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/0T/Df8f/2EAAP+IAAAAAAAAAAAAAAAAAAD/3AAAAAAAAAAAAAAAAP6t/qQAAP6kAAAAAP/BAAAAAP6k/tP+rQAA/skAAP6tAAD+wf+I/vT+5wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+I/vj/Wf99AAAAAAAAAAAAAAAA/9wAAAAAAAAAAAAAAAAAAAAAAAD/YQAAAAD/YQAAAAD/0wAAAAD/YQAAAAAAAP91AAAAAAAA/8kAAP9h/3UAAAAA/63/Ff+I/5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP99AAAAAP+IAAAAAP/TAAAAAP+I/6QAAAAA/7cAAAAAAAD/3AAA/4j/twAAAAD/mgAAAAAAAAAA/2sAAAAAAAAAAP99AAAAAP/cAAAAAAAAAAAAAAAAAAAAAAAA/6QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/2sAAAAAAAAAAP8N/mH+8P9hAAD/kAAAAAAAAAAA/5AAAAAAAAAAAAAAAAAAAAAAAAD+5gAAAAD+8AAAAAD/twAAAAD+8AAAAAAAAP8VAAAAAAAAAAD/kP7w/xUAAAAA/9wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/3AAAAAAAAAAAAAAAAP+Q/2v/twAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/3AAAAAD/3AAA/9wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/cAAAAAP+3AAAAAAAAAAAAAP+3AAAAAAAA/8EAAAAAAAD/twAA/7f/wQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAm/9wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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";
+const FONT_BOLD = "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";
 
-function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-function addRoom(size, names) {
-  roomCounters[size]++;
-  const num = roomCounters[size];
-  const container = document.getElementById(`rooms-${size}`);
-  const card = document.createElement('div');
-  card.className = 'room-card';
-  card.dataset.size = size;
-  let rows = '';
-  for (let i = 1; i <= size; i++) {
-    const v = names && names[i-1] ? names[i-1] : '';
-    rows += `<div class="person-row"><div class="person-num c${size}">${i}</div><input type="text" class="person-input" placeholder="${i}. kişi" value="${esc(v)}"></div>`;
-  }
-  card.innerHTML = `<div class="room-card-header type-${size}"><span>Oda ${num}</span><button class="room-delete-btn" onclick="removeRoom(this)">✕</button></div><div class="room-card-body">${rows}</div>`;
-  container.appendChild(card);
-  updateCount(size);
+// ===== FORM LOGIC =====
+let roomCounters={2:0,3:0,4:0};
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function addRoom(size,names){
+  roomCounters[size]++;const num=roomCounters[size];
+  const container=document.getElementById(`rooms-${size}`);
+  const card=document.createElement('div');card.className='room-card';card.dataset.size=size;
+  let rows='';
+  for(let i=1;i<=size;i++){const v=names&&names[i-1]?names[i-1]:'';rows+=`<div class="person-row"><div class="person-num c${size}">${i}</div><input type="text" class="person-input" placeholder="${i}. kişi" value="${esc(v)}"></div>`}
+  card.innerHTML=`<div class="room-card-header type-${size}"><span>Oda ${num}</span><button class="room-delete-btn" onclick="removeRoom(this)">✕</button></div><div class="room-card-body">${rows}</div>`;
+  container.appendChild(card);updateCount(size);
 }
+function removeRoom(btn){const card=btn.closest('.room-card');const size=parseInt(card.dataset.size);card.remove();renumberRooms(size)}
+function renumberRooms(size){const cards=document.querySelectorAll(`#rooms-${size} .room-card`);roomCounters[size]=cards.length;cards.forEach((c,i)=>{c.querySelector('.room-card-header span').textContent=`Oda ${i+1}`});updateCount(size)}
+function updateCount(size){const n=document.querySelectorAll(`#rooms-${size} .room-card`).length;document.getElementById(`count-${size}`).textContent=`${n} Oda`}
+function initRooms(){for(let i=0;i<8;i++)addRoom(2);for(let i=0;i<7;i++)addRoom(3);for(let i=0;i<7;i++)addRoom(4);document.getElementById('tarih').valueAsDate=new Date()}
 
-function removeRoom(btn) {
-  const card = btn.closest('.room-card');
-  const size = parseInt(card.dataset.size);
-  card.remove();
-  renumberRooms(size);
-}
+// ===== SIGNATURE =====
+const sigCanvas=document.getElementById('sig-canvas');const sigCtx=sigCanvas.getContext('2d');
+let drawing=false,sigEmpty=true;
+function resizeSig(){const w=sigCanvas.parentElement.getBoundingClientRect().width;const dpr=window.devicePixelRatio||1;sigCanvas.width=w*dpr;sigCanvas.height=150*dpr;sigCanvas.style.height='150px';sigCtx.scale(dpr,dpr);sigCtx.lineWidth=2;sigCtx.lineCap='round';sigCtx.lineJoin='round';sigCtx.strokeStyle='#222'}
+function gp(e){const r=sigCanvas.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}
+sigCanvas.addEventListener('pointerdown',e=>{drawing=true;sigEmpty=false;const p=gp(e);sigCtx.beginPath();sigCtx.moveTo(p.x,p.y);e.preventDefault()});
+sigCanvas.addEventListener('pointermove',e=>{if(!drawing)return;const p=gp(e);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();e.preventDefault()});
+sigCanvas.addEventListener('pointerup',()=>drawing=false);
+sigCanvas.addEventListener('pointerleave',()=>drawing=false);
+function clearSig(){const dpr=window.devicePixelRatio||1;sigCtx.clearRect(0,0,sigCanvas.width/dpr,sigCanvas.height/dpr);sigEmpty=true}
 
-function renumberRooms(size) {
-  const cards = document.querySelectorAll(`#rooms-${size} .room-card`);
-  roomCounters[size] = cards.length;
-  cards.forEach((c, i) => { c.querySelector('.room-card-header span').textContent = `Oda ${i+1}`; });
-  updateCount(size);
-}
-
-function updateCount(size) {
-  const n = document.querySelectorAll(`#rooms-${size} .room-card`).length;
-  document.getElementById(`count-${size}`).textContent = `${n} Oda`;
-}
-
-function initRooms() {
-  for (let i = 0; i < 8; i++) addRoom(2);
-  for (let i = 0; i < 7; i++) addRoom(3);
-  for (let i = 0; i < 7; i++) addRoom(4);
-  document.getElementById('tarih').valueAsDate = new Date();
-}
-
-// ═══════════════════════════════════════
-// SIGNATURE
-// ═══════════════════════════════════════
-const sigCanvas = document.getElementById('sig-canvas');
-const sigCtx = sigCanvas.getContext('2d');
-let drawing = false, sigEmpty = true;
-
-function resizeSig() {
-  const w = sigCanvas.parentElement.getBoundingClientRect().width;
-  const dpr = window.devicePixelRatio || 1;
-  sigCanvas.width = w * dpr;
-  sigCanvas.height = 150 * dpr;
-  sigCanvas.style.height = '150px';
-  sigCtx.scale(dpr, dpr);
-  sigCtx.lineWidth = 2; sigCtx.lineCap = 'round'; sigCtx.lineJoin = 'round'; sigCtx.strokeStyle = '#222';
-}
-
-function gp(e) { const r = sigCanvas.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: t.clientX - r.left, y: t.clientY - r.top }; }
-sigCanvas.addEventListener('pointerdown', e => { drawing = true; sigEmpty = false; const p = gp(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); e.preventDefault(); });
-sigCanvas.addEventListener('pointermove', e => { if (!drawing) return; const p = gp(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); e.preventDefault(); });
-sigCanvas.addEventListener('pointerup', () => drawing = false);
-sigCanvas.addEventListener('pointerleave', () => drawing = false);
-
-function clearSig() { const dpr = window.devicePixelRatio || 1; sigCtx.clearRect(0, 0, sigCanvas.width/dpr, sigCanvas.height/dpr); sigEmpty = true; }
-
-// ═══════════════════════════════════════
-// SAVE / LOAD
-// ═══════════════════════════════════════
-function gatherData() {
-  const d = { kafile: document.getElementById('kafile').value, grup: document.getElementById('grup').value, dinGorevlisi: document.getElementById('din-gorevlisi').value, tarih: document.getElementById('tarih').value, signature: sigEmpty ? null : sigCanvas.toDataURL(), rooms: {} };
-  [2,3,4].forEach(s => {
-    d.rooms[s] = [];
-    document.querySelectorAll(`#rooms-${s} .room-card`).forEach(c => {
-      const names = []; c.querySelectorAll('.person-input').forEach(inp => names.push(inp.value)); d.rooms[s].push(names);
-    });
-  });
+// ===== SAVE / LOAD =====
+function gatherData(){
+  const d={kafile:document.getElementById('kafile').value,grup:document.getElementById('grup').value,dinGorevlisi:document.getElementById('din-gorevlisi').value,tarih:document.getElementById('tarih').value,signature:sigEmpty?null:sigCanvas.toDataURL(),rooms:{}};
+  [2,3,4].forEach(s=>{d.rooms[s]=[];document.querySelectorAll(`#rooms-${s} .room-card`).forEach(c=>{const names=[];c.querySelectorAll('.person-input').forEach(inp=>names.push(inp.value));d.rooms[s].push(names)})});
   return d;
 }
-
-function saveData() { localStorage.setItem('odaPlanlamasi', JSON.stringify(gatherData())); showToast('Kaydedildi!'); }
-
-function loadData() {
-  const raw = localStorage.getItem('odaPlanlamasi');
-  if (!raw) { showToast('Kayıtlı veri bulunamadı.'); return; }
-  const d = JSON.parse(raw);
-  document.getElementById('kafile').value = d.kafile || '';
-  document.getElementById('grup').value = d.grup || '';
-  document.getElementById('din-gorevlisi').value = d.dinGorevlisi || '';
-  document.getElementById('tarih').value = d.tarih || '';
-  [2,3,4].forEach(s => { document.getElementById(`rooms-${s}`).innerHTML = ''; roomCounters[s] = 0; if (d.rooms && d.rooms[s]) d.rooms[s].forEach(n => addRoom(s, n)); });
-  if (d.signature) { const img = new Image(); img.onload = () => { const dpr = window.devicePixelRatio||1; sigCtx.clearRect(0,0,sigCanvas.width/dpr,sigCanvas.height/dpr); sigCtx.drawImage(img,0,0,sigCanvas.width/dpr,sigCanvas.height/dpr); sigEmpty = false; }; img.src = d.signature; }
+function saveData(){localStorage.setItem('odaPlanlamasi',JSON.stringify(gatherData()));showToast('Kaydedildi!')}
+function loadData(){
+  const raw=localStorage.getItem('odaPlanlamasi');if(!raw){showToast('Kayıtlı veri bulunamadı.');return}
+  const d=JSON.parse(raw);
+  document.getElementById('kafile').value=d.kafile||'';document.getElementById('grup').value=d.grup||'';document.getElementById('din-gorevlisi').value=d.dinGorevlisi||'';document.getElementById('tarih').value=d.tarih||'';
+  [2,3,4].forEach(s=>{document.getElementById(`rooms-${s}`).innerHTML='';roomCounters[s]=0;if(d.rooms&&d.rooms[s])d.rooms[s].forEach(n=>addRoom(s,n))});
+  if(d.signature){const img=new Image();img.onload=()=>{const dpr=window.devicePixelRatio||1;sigCtx.clearRect(0,0,sigCanvas.width/dpr,sigCanvas.height/dpr);sigCtx.drawImage(img,0,0,sigCanvas.width/dpr,sigCanvas.height/dpr);sigEmpty=false};img.src=d.signature}
   showToast('Yüklendi!');
 }
+function confirmClear(){document.getElementById('clear-modal').classList.add('active')}
+function closeModal(){document.getElementById('clear-modal').classList.remove('active')}
+function clearAll(){closeModal();document.getElementById('kafile').value='';document.getElementById('grup').value='';document.getElementById('din-gorevlisi').value='';document.getElementById('tarih').valueAsDate=new Date();[2,3,4].forEach(s=>{document.getElementById(`rooms-${s}`).innerHTML='';roomCounters[s]=0});clearSig();initRooms();showToast('Form temizlendi.')}
+function showToast(msg){let t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%)',background:'#333',color:'#fff',padding:'10px 24px',borderRadius:'8px',fontSize:'14px',fontWeight:'600',zIndex:'400',opacity:'0',transition:'opacity .3s',fontFamily:'Noto Sans,sans-serif'});document.body.appendChild(t);requestAnimationFrame(()=>t.style.opacity='1');setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),300)},1800)}
 
-function confirmClear() { document.getElementById('clear-modal').classList.add('active'); }
-function closeModal() { document.getElementById('clear-modal').classList.remove('active'); }
-function clearAll() { closeModal(); document.getElementById('kafile').value=''; document.getElementById('grup').value=''; document.getElementById('din-gorevlisi').value=''; document.getElementById('tarih').valueAsDate=new Date(); [2,3,4].forEach(s=>{document.getElementById(`rooms-${s}`).innerHTML='';roomCounters[s]=0;}); clearSig(); initRooms(); showToast('Form temizlendi.'); }
+// ===== PDF EXPORT =====
+async function exportPDF(){
+  const loading=document.getElementById('loading');loading.classList.add('active');
+  await new Promise(r=>setTimeout(r,50));
+  try{
+    const{jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
 
-function showToast(msg) {
-  let t = document.createElement('div'); t.textContent = msg;
-  Object.assign(t.style, { position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%)',background:'#333',color:'#fff',padding:'10px 24px',borderRadius:'8px',fontSize:'14px',fontWeight:'600',zIndex:'400',opacity:'0',transition:'opacity .3s',fontFamily:'Noto Sans,sans-serif' });
-  document.body.appendChild(t);
-  requestAnimationFrame(() => t.style.opacity = '1');
-  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 1800);
-}
+    // Register Turkish fonts
+    pdf.addFileToVFS('DejaVuSans.ttf',FONT_REGULAR);
+    pdf.addFont('DejaVuSans.ttf','DejaVuSans','normal');
+    pdf.addFileToVFS('DejaVuSans-Bold.ttf',FONT_BOLD);
+    pdf.addFont('DejaVuSans-Bold.ttf','DejaVuSans','bold');
 
-// ═══════════════════════════════════════
-// PDF EXPORT — FLOWING COLUMN LAYOUT
-// ═══════════════════════════════════════
-async function exportPDF() {
-  const loading = document.getElementById('loading');
-  loading.classList.add('active');
-  await new Promise(r => setTimeout(r, 50));
+    const F='DejaVuSans';
+    const data=gatherData();
 
-  try {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const data = gatherData();
+    const PW=210,PH=297,ML=10,MR=10,MT=8,MB=8;
+    const COLS=3,COL_GAP=4;
+    const COL_W=(PW-ML-MR-(COLS-1)*COL_GAP)/COLS;
+    const HEADER_H=14,META_H=8,FOOTER_H=26;
+    const SECTION_LABEL_H=6,ROOM_HEADER_H=5,PERSON_ROW_H=5.2,ROOM_GAP=2.5,ROOM_PAD=0.8;
+    const COLORS={2:[26,107,74],3:[44,111,187],4:[139,90,43]};
+    const LABELS={2:'2 Kişilik Oda',3:'3 Kişilik Oda',4:'4 Kişilik Oda'};
 
-    // ── Layout constants (mm) ──
-    const PW = 210, PH = 297;
-    const ML = 10, MR = 10, MT = 8, MB = 8;
-    const COLS = 3, COL_GAP = 4;
-    const COL_W = (PW - ML - MR - (COLS - 1) * COL_GAP) / COLS;
+    let pageNum=0,curCol=0,curY=0;
+    const colX=()=>ML+curCol*(COL_W+COL_GAP);
+    const contentTop=()=>MT+HEADER_H+META_H+2;
+    const contentBottom=()=>PH-MB-FOOTER_H;
+    const availH=()=>contentBottom()-curY;
+    const roomH=(size)=>ROOM_HEADER_H+size*PERSON_ROW_H+ROOM_PAD;
 
-    const HEADER_H = 14;
-    const META_H = 8;
-    const FOOTER_H = 26;
-    const SECTION_LABEL_H = 6;
-    const ROOM_HEADER_H = 5;
-    const PERSON_ROW_H = 5.2;
-    const ROOM_GAP = 2.5;
-    const ROOM_PAD = 0.8;
-
-    const COLORS = { 2: [26,107,74], 3: [44,111,187], 4: [139,90,43] };
-    const LABELS = { 2: '2 Kişilik Oda', 3: '3 Kişilik Oda', 4: '4 Kişilik Oda' };
-
-    let pageNum = 0, curCol = 0, curY = 0;
-
-    const colX = () => ML + curCol * (COL_W + COL_GAP);
-    const contentTop = () => MT + HEADER_H + META_H + 2;
-    const contentBottom = () => PH - MB - FOOTER_H;
-    const availH = () => contentBottom() - curY;
-    const roomH = (size) => ROOM_HEADER_H + size * PERSON_ROW_H + ROOM_PAD;
-
-    // ── Page chrome ──
-    function drawPageChrome() {
-      // Header bar
-      pdf.setFillColor(26, 107, 74);
-      pdf.rect(0, 0, PW, MT + HEADER_H, 'F');
-      pdf.setFont('helvetica', 'bold'); pdf.setFontSize(15); pdf.setTextColor(255,255,255);
-      pdf.text('ODA PLANLAMASI', PW/2, MT + 6, { align: 'center' });
+    function drawPageChrome(){
+      pdf.setFillColor(26,107,74);pdf.rect(0,0,PW,MT+HEADER_H,'F');
+      pdf.setFont(F,'bold');pdf.setFontSize(15);pdf.setTextColor(255,255,255);
+      pdf.text('ODA PLANLAMASI',PW/2,MT+6,{align:'center'});
       pdf.setFontSize(7.5);
-      pdf.text('Hac / Umre Konaklama Formu', PW/2, MT + 10.5, { align: 'center' });
+      pdf.text('Hac / Umre Konaklama Formu',PW/2,MT+10.5,{align:'center'});
 
-      // Meta line
-      const my = MT + HEADER_H + 3;
-      pdf.setFontSize(9); pdf.setFont('helvetica', 'bold'); pdf.setTextColor(50,50,50);
-      pdf.text('Kafile:', ML, my + 3);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(data.kafile || '________________________', ML + 14, my + 3);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Grup:', PW/2 + 5, my + 3);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(data.grup || '________________________', PW/2 + 17, my + 3);
+      const my=MT+HEADER_H+3;
+      pdf.setFontSize(9);pdf.setFont(F,'bold');pdf.setTextColor(50,50,50);
+      pdf.text('Kafile:',ML,my+3);pdf.setFont(F,'normal');
+      pdf.text(data.kafile||'________________________',ML+14,my+3);
+      pdf.setFont(F,'bold');pdf.text('Grup:',PW/2+5,my+3);
+      pdf.setFont(F,'normal');pdf.text(data.grup||'________________________',PW/2+17,my+3);
 
-      // Footer area
-      const fY = contentBottom() + 2;
-      pdf.setDrawColor(170,170,170); pdf.setLineWidth(0.3);
-      pdf.line(ML, fY, PW - MR, fY);
+      const fY=contentBottom()+2;
+      pdf.setDrawColor(170,170,170);pdf.setLineWidth(0.3);pdf.line(ML,fY,PW-MR,fY);
+      const thirds=(PW-ML-MR)/3;
 
-      const thirds = (PW - ML - MR) / 3;
+      pdf.setFontSize(7.5);pdf.setFont(F,'bold');pdf.setTextColor(90,90,90);
+      pdf.text('Din Görevlisi Adı Soyadı',ML,fY+5);
+      pdf.setFont(F,'normal');pdf.setFontSize(9);pdf.setTextColor(30,30,30);
+      if(data.dinGorevlisi){pdf.text(data.dinGorevlisi,ML,fY+11)}
+      else{pdf.setDrawColor(170,170,170);pdf.line(ML,fY+13,ML+thirds-6,fY+13)}
 
-      // Din Görevlisi
-      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(90,90,90);
-      pdf.text('Din Görevlisi Adı Soyadı', ML, fY + 5);
-      pdf.setFont('helvetica','normal'); pdf.setFontSize(9); pdf.setTextColor(30,30,30);
-      if (data.dinGorevlisi) {
-        pdf.text(data.dinGorevlisi, ML, fY + 11);
-      } else {
-        pdf.setDrawColor(170,170,170); pdf.line(ML, fY + 13, ML + thirds - 6, fY + 13);
-      }
+      pdf.setFontSize(7.5);pdf.setFont(F,'bold');pdf.setTextColor(90,90,90);
+      const imzaX=ML+thirds+8;pdf.text('İmza',imzaX,fY+5);
+      if(data.signature){try{pdf.addImage(data.signature,'PNG',imzaX,fY+6,38,15)}catch(e){}}
+      else{pdf.setDrawColor(170,170,170);pdf.line(imzaX,fY+19,imzaX+40,fY+19)}
 
-      // İmza
-      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(90,90,90);
-      const imzaX = ML + thirds + 8;
-      pdf.text('İmza', imzaX, fY + 5);
-      if (data.signature) {
-        try { pdf.addImage(data.signature, 'PNG', imzaX, fY + 6, 38, 15); } catch(e) {}
-      } else {
-        pdf.setDrawColor(170,170,170); pdf.line(imzaX, fY + 19, imzaX + 40, fY + 19);
-      }
-
-      // Tarih
-      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(90,90,90);
-      const tarihX = ML + 2*thirds + 8;
-      pdf.text('Tarih', tarihX, fY + 5);
-      pdf.setFont('helvetica','normal'); pdf.setFontSize(9); pdf.setTextColor(30,30,30);
-      const tStr = data.tarih ? new Date(data.tarih+'T00:00:00').toLocaleDateString('tr-TR') : '';
-      if (tStr) {
-        pdf.text(tStr, tarihX, fY + 11);
-      } else {
-        pdf.setDrawColor(170,170,170); pdf.line(tarihX, fY + 13, tarihX + thirds - 12, fY + 13);
-      }
+      pdf.setFontSize(7.5);pdf.setFont(F,'bold');pdf.setTextColor(90,90,90);
+      const tarihX=ML+2*thirds+8;pdf.text('Tarih',tarihX,fY+5);
+      pdf.setFont(F,'normal');pdf.setFontSize(9);pdf.setTextColor(30,30,30);
+      const tStr=data.tarih?new Date(data.tarih+'T00:00:00').toLocaleDateString('tr-TR'):'';
+      if(tStr){pdf.text(tStr,tarihX,fY+11)}
+      else{pdf.setDrawColor(170,170,170);pdf.line(tarihX,fY+13,tarihX+thirds-12,fY+13)}
     }
 
-    function newPage() {
-      if (pageNum > 0) pdf.addPage();
-      pageNum++;
-      drawPageChrome();
-      curCol = 0;
-      curY = contentTop();
+    function newPage(){if(pageNum>0)pdf.addPage();pageNum++;drawPageChrome();curCol=0;curY=contentTop()}
+    function nextCol(){curCol++;if(curCol>=COLS){newPage()}else{curY=contentTop()}}
+
+    function drawLabel(size){
+      if(availH()<SECTION_LABEL_H+roomH(size))nextCol();
+      const c=COLORS[size],x=colX();
+      pdf.setFillColor(c[0],c[1],c[2]);pdf.roundedRect(x,curY,COL_W,SECTION_LABEL_H-1,1,1,'F');
+      pdf.setFontSize(7.5);pdf.setFont(F,'bold');pdf.setTextColor(255,255,255);
+      pdf.text(LABELS[size],x+COL_W/2,curY+3.6,{align:'center'});
+      curY+=SECTION_LABEL_H;
     }
 
-    function nextCol() {
-      curCol++;
-      if (curCol >= COLS) {
-        newPage();
-      } else {
-        curY = contentTop();
+    function drawRoom(size,idx,names){
+      const rh=roomH(size);if(availH()<rh)nextCol();
+      const x=colX(),y=curY,c=COLORS[size];
+      pdf.setDrawColor(185,185,185);pdf.setLineWidth(0.25);pdf.roundedRect(x,y,COL_W,rh,0.8,0.8,'S');
+      pdf.setFillColor(245,243,240);pdf.rect(x+0.15,y+0.15,COL_W-0.3,ROOM_HEADER_H-0.5,'F');
+      pdf.setDrawColor(200,200,200);pdf.setLineWidth(0.15);pdf.line(x,y+ROOM_HEADER_H-0.3,x+COL_W,y+ROOM_HEADER_H-0.3);
+      pdf.setFontSize(7);pdf.setFont(F,'bold');pdf.setTextColor(c[0],c[1],c[2]);
+      pdf.text(`Oda ${idx+1}`,x+3,y+3.4);
+
+      for(let i=0;i<size;i++){
+        const ry=y+ROOM_HEADER_H+i*PERSON_ROW_H;
+        pdf.setFillColor(c[0],c[1],c[2]);pdf.circle(x+4,ry+2.8,1.7,'F');
+        pdf.setFontSize(5.5);pdf.setFont(F,'bold');pdf.setTextColor(255,255,255);
+        pdf.text(String(i+1),x+4,ry+3.4,{align:'center'});
+        pdf.setFontSize(8);pdf.setFont(F,'normal');pdf.setTextColor(30,30,30);
+        const nm=(names&&names[i])?names[i]:'';
+        if(nm){pdf.text(nm,x+8.5,ry+3.5)}
+        else{pdf.setDrawColor(215,215,215);pdf.setLineWidth(0.1);pdf.line(x+8.5,ry+4,x+COL_W-3,ry+4)}
+        if(i<size-1){pdf.setDrawColor(225,225,225);pdf.setLineWidth(0.1);pdf.line(x+2,ry+PERSON_ROW_H,x+COL_W-2,ry+PERSON_ROW_H)}
       }
+      curY+=rh+ROOM_GAP;
     }
 
-    // ── Draw section label ──
-    function drawLabel(size) {
-      // Need space for label + at least one room
-      const needed = SECTION_LABEL_H + roomH(size);
-      if (availH() < needed) nextCol();
-
-      const c = COLORS[size];
-      const x = colX();
-      pdf.setFillColor(c[0], c[1], c[2]);
-      pdf.roundedRect(x, curY, COL_W, SECTION_LABEL_H - 1, 1, 1, 'F');
-      pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(255,255,255);
-      pdf.text(LABELS[size], x + COL_W/2, curY + 3.6, { align: 'center' });
-      curY += SECTION_LABEL_H;
-    }
-
-    // ── Draw one room ──
-    function drawRoom(size, idx, names) {
-      const rh = roomH(size);
-      if (availH() < rh) nextCol();
-
-      const x = colX(), y = curY;
-      const c = COLORS[size];
-
-      // Outer border
-      pdf.setDrawColor(185,185,185); pdf.setLineWidth(0.25);
-      pdf.roundedRect(x, y, COL_W, rh, 0.8, 0.8, 'S');
-
-      // Room header bg
-      pdf.setFillColor(245,243,240);
-      pdf.rect(x+0.15, y+0.15, COL_W-0.3, ROOM_HEADER_H-0.5, 'F');
-      pdf.setDrawColor(200,200,200); pdf.setLineWidth(0.15);
-      pdf.line(x, y+ROOM_HEADER_H-0.3, x+COL_W, y+ROOM_HEADER_H-0.3);
-
-      // Room number
-      pdf.setFontSize(7); pdf.setFont('helvetica','bold'); pdf.setTextColor(c[0],c[1],c[2]);
-      pdf.text(`Oda ${idx+1}`, x+3, y+3.4);
-
-      // Persons
-      for (let i = 0; i < size; i++) {
-        const ry = y + ROOM_HEADER_H + i * PERSON_ROW_H;
-
-        // Numbered circle
-        pdf.setFillColor(c[0],c[1],c[2]);
-        pdf.circle(x+4, ry+2.8, 1.7, 'F');
-        pdf.setFontSize(5.5); pdf.setFont('helvetica','bold'); pdf.setTextColor(255,255,255);
-        pdf.text(String(i+1), x+4, ry+3.4, { align:'center' });
-
-        // Name text
-        pdf.setFontSize(8); pdf.setFont('helvetica','normal'); pdf.setTextColor(30,30,30);
-        const nm = (names && names[i]) ? names[i] : '';
-        if (nm) {
-          pdf.text(nm, x+8.5, ry+3.5);
-        } else {
-          // Empty line placeholder
-          pdf.setDrawColor(215,215,215); pdf.setLineWidth(0.1);
-          pdf.line(x+8.5, ry+4, x+COL_W-3, ry+4);
-        }
-
-        // Row separator
-        if (i < size - 1) {
-          pdf.setDrawColor(225,225,225); pdf.setLineWidth(0.1);
-          pdf.line(x+2, ry+PERSON_ROW_H, x+COL_W-2, ry+PERSON_ROW_H);
-        }
-      }
-
-      curY += rh + ROOM_GAP;
-    }
-
-    // ═══ Generate pages ═══
     newPage();
-
-    [2, 3, 4].forEach(size => {
-      const rooms = data.rooms[size] || [];
-      if (rooms.length === 0) return;
-      drawLabel(size);
-      rooms.forEach((names, idx) => drawRoom(size, idx, names));
+    [2,3,4].forEach(size=>{
+      const rooms=data.rooms[size]||[];if(rooms.length===0)return;
+      drawLabel(size);rooms.forEach((names,idx)=>drawRoom(size,idx,names));
     });
 
-    // Page numbers
-    const total = pdf.internal.getNumberOfPages();
-    for (let i = 1; i <= total; i++) {
-      pdf.setPage(i);
-      pdf.setFontSize(6.5); pdf.setFont('helvetica','normal'); pdf.setTextColor(160,160,160);
-      pdf.text(`Sayfa ${i} / ${total}`, PW/2, PH - 3, { align: 'center' });
+    const total=pdf.internal.getNumberOfPages();
+    for(let i=1;i<=total;i++){
+      pdf.setPage(i);pdf.setFontSize(6.5);pdf.setFont(F,'normal');pdf.setTextColor(160,160,160);
+      pdf.text(`Sayfa ${i} / ${total}`,PW/2,PH-3,{align:'center'});
     }
 
     pdf.save(`Oda_Planlamasi_${(data.kafile||'form').replace(/\s+/g,'_')}.pdf`);
-  } catch(err) {
-    console.error(err);
-    showToast('PDF oluşturulurken hata oluştu.');
-  }
-
+  }catch(err){console.error(err);showToast('PDF oluşturulurken hata oluştu.')}
   loading.classList.remove('active');
 }
 
-// ═══════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════
-window.addEventListener('DOMContentLoaded', () => { resizeSig(); initRooms(); });
-window.addEventListener('resize', resizeSig);
-</script>
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded',()=>{resizeSig();initRooms()});
+window.addEventListener('resize',resizeSig);
+<\/script>
 </body>
 </html>
