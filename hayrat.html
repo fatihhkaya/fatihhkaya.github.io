@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Oda Planlaması</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #f5f3ef;
+    --card: #ffffff;
+    --border: #c8bfb3;
+    --border-light: #e2ddd6;
+    --text: #2c2520;
+    --text-muted: #7a7068;
+    --accent: #1a6b4a;
+    --accent-light: #e8f5ee;
+    --accent-dark: #134f37;
+    --danger: #c0392b;
+    --danger-light: #fdeaea;
+    --header-bg: #1a6b4a;
+    --header-text: #ffffff;
+    --room2: #1a6b4a;
+    --room3: #2c6fbb;
+    --room4: #8b5a2b;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --radius: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Top Bar ── */
+  .top-bar {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-md);
+  }
+  .top-bar h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .top-bar p {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  /* ── Action Buttons Bar ── */
+  .action-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 68px;
+    z-index: 99;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .action-bar::-webkit-scrollbar { display: none; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+  }
+  .btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border: 1.5px solid var(--danger);
+  }
+  .btn svg { width: 16px; height: 16px; }
+
+  /* ── Main Content ── */
+  .container {
+    padding: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* ── Meta Fields ── */
+  .meta-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .meta-field {
+    background: var(--card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+  }
+  .meta-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .meta-field input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    background: transparent;
+  }
+
+  /* ── Room Type Sections ── */
+  .room-type-section {
+    margin-bottom: 20px;
+  }
+  .room-type-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .room-type-header.type-2 { background: var(--room2); }
+  .room-type-header.type-3 { background: var(--room3); }
+  .room-type-header.type-4 { background: var(--room4); }
+
+  .room-type-header .count-badge {
+    background: rgba(255,255,255,0.25);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+
+  .add-room-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.15s;
+  }
+  .add-room-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  /* ── Room Card ── */
+  .room-card {
+    background: var(--card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .room-card:focus-within {
+    box-shadow: var(--shadow-md);
+  }
+  .room-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .room-card-header.type-2 { background: var(--room2); }
+  .room-card-header.type-3 { background: var(--room3); }
+  .room-card-header.type-4 { background: var(--room4); }
+
+  .room-delete-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .room-card-body {
+    padding: 8px 12px 12px;
+  }
+  .person-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .person-row:last-child { border-bottom: none; }
+  .person-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .type-2 .person-num, .person-num.c2 { background: var(--room2); }
+  .type-3 .person-num, .person-num.c3 { background: var(--room3); }
+  .type-4 .person-num, .person-num.c4 { background: var(--room4); }
+
+  .person-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: transparent;
+    padding: 4px 0;
+  }
+  .person-input::placeholder { color: var(--border); }
+
+  /* ── Footer Section ── */
+  .footer-section {
+    background: var(--card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-top: 20px;
+    box-shadow: var(--shadow);
+  }
+  .footer-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .footer-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .footer-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .footer-field input {
+    width: 100%;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border 0.15s;
+  }
+  .footer-field input:focus {
+    border-color: var(--accent);
+  }
+
+  /* ── Signature ── */
+  .sig-area {
+    margin-top: 12px;
+  }
+  .sig-area label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .sig-canvas-wrap {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: #fafaf8;
+    position: relative;
+    overflow: hidden;
+  }
+  .sig-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    touch-action: none;
+  }
+  .sig-clear {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  .modal-box h3 { margin-bottom: 8px; font-size: 18px; }
+  .modal-box p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+  /* ── PDF render area (hidden) ── */
+  #pdf-render {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 794px;
+    background: #fff;
+    font-family: 'Noto Sans', sans-serif;
+    color: #222;
+    padding: 30px 36px;
+  }
+  #pdf-render .pdf-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid #222;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  #pdf-render .pdf-meta {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  #pdf-render .pdf-meta span { font-weight: 600; }
+  #pdf-render .pdf-columns {
+    display: flex;
+    gap: 16px;
+  }
+  #pdf-render .pdf-col {
+    flex: 1;
+  }
+  #pdf-render .pdf-col-title {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px;
+    color: #fff;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+  #pdf-render .pdf-room {
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    overflow: hidden;
+  }
+  #pdf-render .pdf-room-header {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    background: #eee;
+    border-bottom: 1px solid #bbb;
+  }
+  #pdf-render .pdf-person {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 6px;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 12px;
+    min-height: 22px;
+  }
+  #pdf-render .pdf-person:last-child { border-bottom: none; }
+  #pdf-render .pdf-person .num {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  #pdf-render .pdf-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid #bbb;
+    font-size: 12px;
+  }
+  #pdf-render .pdf-footer .sig-img {
+    max-height: 50px;
+  }
+  #pdf-render .pdf-footer-item { text-align: center; }
+  #pdf-render .pdf-footer-item span { display: block; font-weight: 700; font-size: 11px; margin-bottom: 4px; }
+
+  /* ── Loading overlay ── */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.85);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .loading-overlay.active { display: flex; }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--border-light);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>ODA PLANLAMASI</h1>
+  <p>Hac / Umre Konaklama Formu</p>
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-primary" onclick="exportPDF()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+    PDF İndir
+  </button>
+  <button class="btn btn-outline" onclick="saveData()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    Kaydet
+  </button>
+  <button class="btn btn-outline" onclick="loadData()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Yükle
+  </button>
+  <button class="btn btn-danger" onclick="confirmClear()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    Temizle
+  </button>
+</div>
+
+<div class="container" id="main-form">
+  <!-- Meta -->
+  <div class="meta-section">
+    <div class="meta-field">
+      <label>Kafile</label>
+      <input type="text" id="kafile" placeholder="Kafile adı...">
+    </div>
+    <div class="meta-field">
+      <label>Grup</label>
+      <input type="text" id="grup" placeholder="Grup adı...">
+    </div>
+  </div>
+
+  <!-- 2 Kişilik -->
+  <div class="room-type-section" id="section-2">
+    <div class="room-type-header type-2">
+      <span>2 Kişilik Oda</span>
+      <span class="count-badge" id="count-2">8 Oda</span>
+    </div>
+    <div id="rooms-2"></div>
+    <button class="add-room-btn" onclick="addRoom(2)">+ Oda Ekle</button>
+  </div>
+
+  <!-- 3 Kişilik -->
+  <div class="room-type-section" id="section-3">
+    <div class="room-type-header type-3">
+      <span>3 Kişilik Oda</span>
+      <span class="count-badge" id="count-3">7 Oda</span>
+    </div>
+    <div id="rooms-3"></div>
+    <button class="add-room-btn" onclick="addRoom(3)">+ Oda Ekle</button>
+  </div>
+
+  <!-- 4 Kişilik -->
+  <div class="room-type-section" id="section-4">
+    <div class="room-type-header type-4">
+      <span>4 Kişilik Oda</span>
+      <span class="count-badge" id="count-4">7 Oda</span>
+    </div>
+    <div id="rooms-4"></div>
+    <button class="add-room-btn" onclick="addRoom(4)">+ Oda Ekle</button>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-section">
+    <h3>Yetkili Bilgileri</h3>
+    <div class="footer-fields">
+      <div class="footer-field">
+        <label>Din Görevlisi Adı Soyadı</label>
+        <input type="text" id="din-gorevlisi" placeholder="Ad Soyad...">
+      </div>
+      <div class="footer-field">
+        <label>Tarih</label>
+        <input type="date" id="tarih">
+      </div>
+    </div>
+    <div class="sig-area">
+      <label>İmza</label>
+      <div class="sig-canvas-wrap">
+        <canvas id="sig-canvas" height="150"></canvas>
+        <button class="sig-clear" onclick="clearSig()">Temizle</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Clear confirmation modal -->
+<div class="modal-overlay" id="clear-modal">
+  <div class="modal-box">
+    <h3>Formu Temizle</h3>
+    <p>Tüm bilgiler silinecek. Devam etmek istiyor musunuz?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">İptal</button>
+      <button class="btn btn-danger" onclick="clearAll()" style="border:none;background:var(--danger);color:#fff;">Temizle</button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <span style="font-size:14px;color:var(--text-muted);">PDF hazırlanıyor...</span>
+</div>
+
+<!-- Hidden PDF render area -->
+<div id="pdf-render"></div>
+
+<script>
+// ── State ──
+let roomCounters = { 2: 0, 3: 0, 4: 0 };
+
+function addRoom(size, names) {
+  roomCounters[size]++;
+  const num = roomCounters[size];
+  const container = document.getElementById(`rooms-${size}`);
+  const typeClass = `type-${size}`;
+  const colorClass = `c${size}`;
+
+  const card = document.createElement('div');
+  card.className = 'room-card';
+  card.dataset.size = size;
+  card.dataset.num = num;
+
+  let personsHTML = '';
+  for (let i = 1; i <= size; i++) {
+    const val = (names && names[i - 1]) ? names[i - 1] : '';
+    personsHTML += `
+      <div class="person-row">
+        <div class="person-num ${colorClass}">${i}</div>
+        <input type="text" class="person-input" placeholder="${i}. kişi" value="${escapeHtml(val)}">
+      </div>`;
+  }
+
+  card.innerHTML = `
+    <div class="room-card-header ${typeClass}">
+      <span>Oda ${num}</span>
+      <button class="room-delete-btn" onclick="removeRoom(this)" title="Odayı sil">✕</button>
+    </div>
+    <div class="room-card-body">${personsHTML}</div>`;
+
+  container.appendChild(card);
+  updateCount(size);
+}
+
+function removeRoom(btn) {
+  const card = btn.closest('.room-card');
+  const size = parseInt(card.dataset.size);
+  card.remove();
+  renumberRooms(size);
+}
+
+function renumberRooms(size) {
+  const container = document.getElementById(`rooms-${size}`);
+  const cards = container.querySelectorAll('.room-card');
+  roomCounters[size] = cards.length;
+  cards.forEach((card, i) => {
+    card.dataset.num = i + 1;
+    card.querySelector('.room-card-header span:first-child').textContent = `Oda ${i + 1}`;
+  });
+  updateCount(size);
+}
+
+function updateCount(size) {
+  const container = document.getElementById(`rooms-${size}`);
+  const count = container.querySelectorAll('.room-card').length;
+  document.getElementById(`count-${size}`).textContent = `${count} Oda`;
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ── Initialize default rooms ──
+function initRooms() {
+  for (let i = 0; i < 8; i++) addRoom(2);
+  for (let i = 0; i < 7; i++) addRoom(3);
+  for (let i = 0; i < 7; i++) addRoom(4);
+  document.getElementById('tarih').valueAsDate = new Date();
+}
+
+// ── Signature Pad ──
+const sigCanvas = document.getElementById('sig-canvas');
+const sigCtx = sigCanvas.getContext('2d');
+let drawing = false;
+let sigEmpty = true;
+
+function resizeSigCanvas() {
+  const wrap = sigCanvas.parentElement;
+  const rect = wrap.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  sigCanvas.width = rect.width * dpr;
+  sigCanvas.height = 150 * dpr;
+  sigCanvas.style.height = '150px';
+  sigCtx.scale(dpr, dpr);
+  sigCtx.lineWidth = 2;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  sigCtx.strokeStyle = '#222';
+}
+
+function getPos(e) {
+  const rect = sigCanvas.getBoundingClientRect();
+  const t = e.touches ? e.touches[0] : e;
+  return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+}
+
+sigCanvas.addEventListener('pointerdown', (e) => {
+  drawing = true;
+  sigEmpty = false;
+  const p = getPos(e);
+  sigCtx.beginPath();
+  sigCtx.moveTo(p.x, p.y);
+  e.preventDefault();
+});
+sigCanvas.addEventListener('pointermove', (e) => {
+  if (!drawing) return;
+  const p = getPos(e);
+  sigCtx.lineTo(p.x, p.y);
+  sigCtx.stroke();
+  e.preventDefault();
+});
+sigCanvas.addEventListener('pointerup', () => drawing = false);
+sigCanvas.addEventListener('pointerleave', () => drawing = false);
+
+function clearSig() {
+  const dpr = window.devicePixelRatio || 1;
+  sigCtx.clearRect(0, 0, sigCanvas.width / dpr, sigCanvas.height / dpr);
+  sigEmpty = true;
+}
+
+// ── Save / Load ──
+function gatherData() {
+  const data = {
+    kafile: document.getElementById('kafile').value,
+    grup: document.getElementById('grup').value,
+    dinGorevlisi: document.getElementById('din-gorevlisi').value,
+    tarih: document.getElementById('tarih').value,
+    signature: sigEmpty ? null : sigCanvas.toDataURL(),
+    rooms: {}
+  };
+  [2, 3, 4].forEach(size => {
+    data.rooms[size] = [];
+    document.querySelectorAll(`#rooms-${size} .room-card`).forEach(card => {
+      const names = [];
+      card.querySelectorAll('.person-input').forEach(inp => names.push(inp.value));
+      data.rooms[size].push(names);
+    });
+  });
+  return data;
+}
+
+function saveData() {
+  const data = gatherData();
+  localStorage.setItem('odaPlanlamasi', JSON.stringify(data));
+  showToast('Kaydedildi!');
+}
+
+function loadData() {
+  const raw = localStorage.getItem('odaPlanlamasi');
+  if (!raw) { showToast('Kayıtlı veri bulunamadı.'); return; }
+  const data = JSON.parse(raw);
+  document.getElementById('kafile').value = data.kafile || '';
+  document.getElementById('grup').value = data.grup || '';
+  document.getElementById('din-gorevlisi').value = data.dinGorevlisi || '';
+  document.getElementById('tarih').value = data.tarih || '';
+
+  [2, 3, 4].forEach(size => {
+    const container = document.getElementById(`rooms-${size}`);
+    container.innerHTML = '';
+    roomCounters[size] = 0;
+    if (data.rooms && data.rooms[size]) {
+      data.rooms[size].forEach(names => addRoom(size, names));
+    }
+  });
+
+  if (data.signature) {
+    const img = new Image();
+    img.onload = () => {
+      const dpr = window.devicePixelRatio || 1;
+      sigCtx.clearRect(0, 0, sigCanvas.width / dpr, sigCanvas.height / dpr);
+      sigCtx.drawImage(img, 0, 0, sigCanvas.width / dpr, sigCanvas.height / dpr);
+      sigEmpty = false;
+    };
+    img.src = data.signature;
+  }
+  showToast('Yüklendi!');
+}
+
+function confirmClear() {
+  document.getElementById('clear-modal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('clear-modal').classList.remove('active');
+}
+function clearAll() {
+  closeModal();
+  document.getElementById('kafile').value = '';
+  document.getElementById('grup').value = '';
+  document.getElementById('din-gorevlisi').value = '';
+  document.getElementById('tarih').valueAsDate = new Date();
+  [2, 3, 4].forEach(size => {
+    document.getElementById(`rooms-${size}`).innerHTML = '';
+    roomCounters[size] = 0;
+  });
+  clearSig();
+  initRooms();
+  showToast('Form temizlendi.');
+}
+
+// ── Toast ──
+function showToast(msg) {
+  let t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
+    background: '#333', color: '#fff', padding: '10px 24px', borderRadius: '8px',
+    fontSize: '14px', fontWeight: '600', zIndex: '400', opacity: '0',
+    transition: 'opacity 0.3s', fontFamily: 'Noto Sans, sans-serif'
+  });
+  document.body.appendChild(t);
+  requestAnimationFrame(() => t.style.opacity = '1');
+  setTimeout(() => {
+    t.style.opacity = '0';
+    setTimeout(() => t.remove(), 300);
+  }, 1800);
+}
+
+// ── PDF Export ──
+async function exportPDF() {
+  const loading = document.getElementById('loading');
+  loading.classList.add('active');
+
+  const data = gatherData();
+  const render = document.getElementById('pdf-render');
+  render.style.left = '0';
+  render.style.position = 'absolute';
+
+  const colors = { 2: '#1a6b4a', 3: '#2c6fbb', 4: '#8b5a2b' };
+
+  // Build columns
+  let colsHTML = '';
+  [2, 3, 4].forEach(size => {
+    const rooms = data.rooms[size] || [];
+    let roomsHTML = '';
+    rooms.forEach((names, idx) => {
+      let personsHTML = '';
+      for (let i = 0; i < size; i++) {
+        personsHTML += `<div class="pdf-person"><div class="num" style="background:${colors[size]}">${i + 1}</div><span>${names[i] || ''}</span></div>`;
+      }
+      roomsHTML += `<div class="pdf-room"><div class="pdf-room-header">Oda ${idx + 1}</div>${personsHTML}</div>`;
+    });
+    colsHTML += `<div class="pdf-col"><div class="pdf-col-title" style="background:${colors[size]}">${size} Kişilik Oda</div>${roomsHTML}</div>`;
+  });
+
+  // Signature
+  let sigHTML = '';
+  if (data.signature) {
+    sigHTML = `<img class="sig-img" src="${data.signature}" alt="İmza">`;
+  } else {
+    sigHTML = '<div style="width:120px;border-bottom:1px solid #999;height:40px;"></div>';
+  }
+
+  const tarihFormatted = data.tarih ? new Date(data.tarih + 'T00:00:00').toLocaleDateString('tr-TR') : '';
+
+  render.innerHTML = `
+    <div class="pdf-title">ODA PLANLAMASI</div>
+    <div class="pdf-meta">
+      <div><span>Kafile:</span> ${data.kafile || '____________________'}</div>
+      <div><span>Grup:</span> ${data.grup || '____________________'}</div>
+    </div>
+    <div class="pdf-columns">${colsHTML}</div>
+    <div class="pdf-footer">
+      <div class="pdf-footer-item"><span>Din Görevlisi Adı Soyadı</span>${data.dinGorevlisi || '____________________'}</div>
+      <div class="pdf-footer-item"><span>İmza</span>${sigHTML}</div>
+      <div class="pdf-footer-item"><span>Tarih</span>${tarihFormatted || '____________________'}</div>
+    </div>`;
+
+  await new Promise(r => setTimeout(r, 200));
+
+  try {
+    const canvas = await html2canvas(render, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = 210;
+    const pageH = 297;
+    const imgW = pageW;
+    const imgH = (canvas.height * imgW) / canvas.width;
+
+    if (imgH <= pageH) {
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgW, imgH);
+    } else {
+      // Multi-page
+      let yOffset = 0;
+      while (yOffset < canvas.height) {
+        const sliceH = Math.min(canvas.height - yOffset, (canvas.width * pageH) / imgW);
+        const sliceCanvas = document.createElement('canvas');
+        sliceCanvas.width = canvas.width;
+        sliceCanvas.height = sliceH;
+        const sCtx = sliceCanvas.getContext('2d');
+        sCtx.drawImage(canvas, 0, yOffset, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+        const renderedH = (sliceH * imgW) / canvas.width;
+        pdf.addImage(sliceCanvas.toDataURL('image/png'), 'PNG', 0, 0, imgW, renderedH);
+        yOffset += sliceH;
+        if (yOffset < canvas.height) pdf.addPage();
+      }
+    }
+
+    pdf.save(`Oda_Planlamasi_${data.kafile || 'form'}.pdf`);
+  } catch (err) {
+    console.error(err);
+    showToast('PDF oluşturulurken hata oluştu.');
+  }
+
+  render.style.left = '-9999px';
+  loading.classList.remove('active');
+}
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', () => {
+  resizeSigCanvas();
+  initRooms();
+});
+window.addEventListener('resize', resizeSigCanvas);
+</script>
+</body>
+</html>
