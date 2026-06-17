@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>And Pilates — Ders Hakkı & İptal Hakkı Kuralları</title>
+<style>
+  :root{
+    --burgundy:#8B1A4A; --burgundy-dark:#6e1239; --burgundy-soft:#f7e9ef;
+    --ink:#241019; --muted:#6b5560; --line:#ecdfe5; --bg:#fbf7f9;
+    --green:#1f8a54; --green-soft:#e6f4ec;
+    --red:#c0392b; --red-soft:#fbeae8;
+    --amber:#b8860b; --amber-soft:#fbf3dd;
+    --blue:#1f5f9a; --blue-soft:#e8f1fa;
+    --radius:14px; --shadow:0 4px 18px rgba(139,26,74,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+  header.hero{background:linear-gradient(135deg,var(--burgundy),var(--burgundy-dark));
+    color:#fff;padding:48px 20px 40px;text-align:center;margin-bottom:34px;
+    box-shadow:var(--shadow)}
+  header.hero h1{margin:0 0 8px;font-size:30px;letter-spacing:.3px}
+  header.hero p{margin:0;opacity:.92;font-size:15px}
+  .hero-inner{max-width:1080px;margin:0 auto}
+  h2{font-size:22px;margin:42px 0 14px;color:var(--burgundy);
+    border-bottom:2px solid var(--line);padding-bottom:8px}
+  h3{font-size:17px;margin:0 0 4px}
+  p{margin:0 0 12px}
+  .lead{color:var(--muted);font-size:15px;margin-bottom:22px}
+
+  /* Rights summary */
+  .rights{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:8px 0 10px}
+  .right-card{background:#fff;border-radius:var(--radius);padding:20px 22px;
+    box-shadow:var(--shadow);border:1px solid var(--line)}
+  .right-card .tag{display:inline-block;font-weight:700;font-size:12px;letter-spacing:.5px;
+    padding:4px 10px;border-radius:20px;margin-bottom:10px}
+  .tag.lesson{background:var(--burgundy-soft);color:var(--burgundy)}
+  .tag.cancel{background:var(--blue-soft);color:var(--blue)}
+  .right-card code{background:#f3eef1;padding:1px 6px;border-radius:5px;font-size:13px}
+
+  /* 6 hour rule */
+  .rule6{background:#fff;border-left:5px solid var(--burgundy);border-radius:10px;
+    padding:16px 20px;box-shadow:var(--shadow);margin:18px 0 8px}
+  .rule6 b{color:var(--burgundy)}
+
+  /* flow cards */
+  .flow{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+    border:1px solid var(--line);margin:18px 0;overflow:hidden}
+  .flow > .head{display:flex;align-items:center;gap:12px;padding:16px 20px;
+    background:var(--burgundy-soft);border-bottom:1px solid var(--line)}
+  .flow > .head .num{flex:0 0 34px;width:34px;height:34px;border-radius:50%;
+    background:var(--burgundy);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:15px}
+  .flow > .head .t h3{color:var(--burgundy-dark)}
+  .flow > .head .t small{color:var(--muted);font-size:12.5px}
+  .flow .body{padding:6px 20px 18px}
+
+  .phase{padding:14px 0;border-bottom:1px dashed var(--line)}
+  .phase:last-child{border-bottom:none}
+  .phase .ph-label{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+    color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:7px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .dot.req{background:var(--amber)} .dot.ok{background:var(--green)} .dot.no{background:var(--red)}
+
+  ul.clean{margin:4px 0 0;padding-left:0;list-style:none}
+  ul.clean li{position:relative;padding:3px 0 3px 22px;font-size:14.5px}
+  ul.clean li::before{content:"";position:absolute;left:4px;top:12px;width:6px;height:6px;
+    border-radius:50%;background:var(--burgundy)}
+
+  .badge{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:6px;
+    margin:0 2px;white-space:nowrap}
+  .b-l-down{background:var(--red-soft);color:var(--red)}
+  .b-l-up{background:var(--green-soft);color:var(--green)}
+  .b-c-down{background:var(--blue-soft);color:var(--blue)}
+  .b-none{background:#eee;color:#555}
+  .pill{display:inline-block;background:#f3eef1;border:1px solid var(--line);border-radius:20px;
+    padding:2px 10px;font-size:12.5px;font-weight:600;color:var(--burgundy-dark);margin:2px 4px 2px 0}
+
+  .msg{background:#fbfafb;border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:8px;padding:8px 12px;font-size:13px;color:var(--muted);margin-top:6px;font-style:italic}
+
+  /* matrix table */
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);
+    overflow:hidden;box-shadow:var(--shadow);font-size:14px;margin:10px 0}
+  th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--burgundy);color:#fff;font-size:13px;letter-spacing:.3px}
+  tr:last-child td{border-bottom:none}
+  td.cond{font-weight:600}
+  tbody tr:nth-child(even){background:#fcf9fb}
+
+  .warn{background:var(--amber-soft);border:1px solid #ecd9a0;border-left:5px solid var(--amber);
+    border-radius:12px;padding:16px 20px;margin:16px 0}
+  .warn h3{color:#8a6500;display:flex;align-items:center;gap:8px}
+  .warn code{background:#fff4d6;padding:1px 6px;border-radius:5px;font-size:13px}
+
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px}
+  .legend span{font-size:12.5px;color:var(--muted)}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:46px;
+    padding-top:18px;border-top:1px solid var(--line)}
+  .file{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--burgundy)}
+  @media(max-width:680px){.rights{grid-template-columns:1fr}header.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Ders Hakkı &amp; İptal Hakkı Kuralları</h1>
+    <p>And Pilates — Üyenin tüm ders işlemlerinde hakların nasıl işlediği · Güncel sürüm (v1.3.68)</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <p class="lead">Bu sayfa, bir üyenin yapabileceği <b>tüm</b> ders işlemlerini (ders alma, ders değişikliği, ders iptali, randevu talebi ve randevuyla alınmış dersin değiştirilmesi/iptali) ve her birinde <b>ders hakkı</b> ile <b>iptal hakkı</b>nın ne zaman <b>düştüğünü</b>, <b>iade edildiğini</b> veya <b>değişmediğini</b> uygulamadaki gerçek mantığa göre açıklar.</p>
+
+  <!-- RIGHTS -->
+  <h2>İki Temel Hak</h2>
+  <div class="rights">
+    <div class="right-card">
+      <span class="tag lesson">DERS HAKKI</span>
+      <h3>remainingLessons (L)</h3>
+      <p>Üyenin kalan ders sayısı. Her onaylanan ders <code>L</code>'den 1 düşer. Hiçbir zaman <b>negatife inmez</b> (alt sınır 0).</p>
+    </div>
+    <div class="right-card">
+      <span class="tag cancel">İPTAL HAKKI</span>
+      <h3>remainingCancellations (C)</h3>
+      <p>Üyenin cezasız iptal / değişiklik hakkı. Doğru kullanıldığında dersin geri kazanılmasını sağlar. Hiçbir zaman <b>negatife inmez</b>.</p>
+    </div>
+  </div>
+
+  <div class="rule6">
+    <p style="margin:0"><b>⏱ 6 Saat Kuralı.</b> Tüm değişiklik ve iptal işlemlerinde belirleyici eşik:
+    dersin başlama anına <b>6 saatten fazla</b> varsa <b>“erken”</b>, <b>6 saatten az</b> kaldıysa <b>“geç”</b> işlem sayılır.
+    Teknik karşılığı: <code>dersZamanı &le; şuAn + 6 saat</code> → geç.</p>
+  </div>
+
+  <div class="rule6" style="border-left-color:var(--blue)">
+    <p style="margin:0"><b>🔒 Tek Talep Kuralı (hasAnyPendingRequest).</b> Üyenin aynı anda yalnızca <b>bir</b> bekleyen talebi olabilir.
+    Bekleyen bir ders alma / değişiklik / iptal / randevu talebi varken yeni talep engellenir:
+    <span class="msg" style="display:inline-block;margin-top:4px">“Daha önce bir talepte bulundunuz. Lütfen onun sonuçlanmasını bekleyiniz.”</span></p>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot req"></span> <b>Talep anında</b> — üyenin gönderebilmesi için gereken koşullar</span>
+    <span><span class="dot ok"></span> <b>Admin onayında</b> — haklar bu aşamada güncellenir</span>
+    <span><span class="dot no"></span> <b>Admin reddinde</b> — sonuç</span>
+    <br>
+    <span><span class="badge b-l-down">L −1</span> ders hakkı düşer</span>
+    <span><span class="badge b-l-up">L +1</span> ders hakkı iade</span>
+    <span><span class="badge b-c-down">C −1</span> iptal hakkı düşer</span>
+    <span><span class="badge b-none">değişmez</span></span>
+  </div>
+
+  <h2>İşlem Akışları</h2>
+
+  <!-- 1 BOOKING -->
+  <div class="flow">
+    <div class="head">
+      <div class="num">1</div>
+      <div class="t"><h3>Yeni Ders Alma (Ders Seçme)</h3>
+        <small>Üye takvimden bir derse kayıt olur · origin: memberBooked</small></div>
+    </div>
+    <div class="body">
+      <div class="phase">
+        <div class="ph-label"><span class="dot req"></span> Talep anında — gereken koşullar</div>
+        <ul class="clean">
+          <li>Bekleyen başka talep olmamalı (tek talep kuralı)</li>
+          <li>Ders geçmiş tarihte/saatte olmamalı</li>
+          <li>Aynı gün aynı derse mükerrer kayıt olmamalı</li>
+          <li>En az <b>1 ders hakkı</b> olmalı <span class="pill">L &ge; 1</span></li>
+          <li><b>Hak düşmez</b> — kayıt <b>pending</b> (admin onayı bekler) olarak oluşur</li>
+        </ul>
+        <div class="msg">L &lt; 1 ise: “Ders hakkınız kalmamıştır. Yeniden ders alabilmek için iletişime geçin.”</div>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot ok"></span> Admin onayında</div>
+        <ul class="clean">
+          <li>Kayıt <b>active</b> olur · <span class="badge b-l-down">L −1</span> ders hakkı düşer</li>
+          <li>İptal hakkına bakılmaz / değişmez</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot no"></span> Admin reddinde</div>
+        <ul class="clean"><li>Kayıt <b>rejected</b> olur · <span class="badge b-none">hiçbir hak değişmez</span></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 CHANGE -->
+  <div class="flow">
+    <div class="head">
+      <div class="num">2</div>
+      <div class="t"><h3>Ders Değişikliği</h3>
+        <small>Üye mevcut dersini başka bir derse taşımak ister</small></div>
+    </div>
+    <div class="body">
+      <div class="phase">
+        <div class="ph-label"><span class="dot req"></span> Talep anında — gereken koşullar</div>
+        <ul class="clean">
+          <li>Bekleyen başka talep olmamalı</li>
+          <li><b>Erken (≥6 saat):</b> yalnızca <b>ders hakkı</b> kontrol edilir <span class="pill">L &ge; 1</span> — iptal hakkına <b>bakılmaz</b></li>
+          <li><b>Geç (&lt;6 saat):</b> hem ders hem iptal hakkı gerekir <span class="pill">L &ge; 1</span> <span class="pill">C &ge; 1</span></li>
+          <li><b>Hak düşmez</b> — eski ders “değişiklik talebi” işaretlenir, yeni ders <b>pending</b> oluşur</li>
+        </ul>
+        <div class="msg">L &lt; 1: “Ders değişikliği yapabilmek için en az 1 ders hakkınız olmalıdır.” &nbsp;·&nbsp;
+        Geç + C &lt; 1: “Dersinize 6 saatten az kaldığı için değişiklik yapabilmek için iptal hakkınız da bulunmalıdır.”</div>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot ok"></span> Admin onayında</div>
+        <ul class="clean">
+          <li>Eski ders <b>changedClass</b>, yeni ders <b>active</b> olur</li>
+          <li><b>Geç değişiklik:</b> <span class="badge b-l-down">L −1</span></li>
+          <li><b>Erken değişiklik:</b> iptal hakkı varsa önce ondan <span class="badge b-c-down">C −1</span> (ders hakkı korunur), iptal hakkı yoksa <span class="badge b-l-down">L −1</span></li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot no"></span> Admin reddinde</div>
+        <ul class="clean"><li>Yeni ders <b>rejected</b>, eski ders tekrar <b>active</b> olur · <span class="badge b-none">hiçbir hak değişmez</span></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 CANCEL -->
+  <div class="flow">
+    <div class="head">
+      <div class="num">3</div>
+      <div class="t"><h3>Ders İptali</h3>
+        <small>Üye mevcut bir dersini iptal etmek ister</small></div>
+    </div>
+    <div class="body">
+      <div class="phase">
+        <div class="ph-label"><span class="dot req"></span> Talep anında — gereken koşullar</div>
+        <ul class="clean">
+          <li>Bekleyen başka talep olmamalı</li>
+          <li><b>Erken (&gt;6 saat):</b> en az bir hak yeterli — <b>iptal hakkı ya da ders hakkı</b> olmalı <span class="pill">C &ge; 1 <i>veya</i> L &ge; 1</span></li>
+          <li><b>Geç (&lt;6 saat):</b> hem ders hem iptal hakkı gerekir <span class="pill">L &ge; 1</span> <span class="pill">C &ge; 1</span></li>
+          <li><b>Hak düşmez</b> — kayıt “iptal talebi” olarak <b>pending</b> işaretlenir</li>
+        </ul>
+        <div class="msg">
+          Geç + L &lt; 1: “Dersinize 6 saatten az kaldığı için iptal talebi göndermek için en az 1 ders hakkınız olmalıdır.”<br>
+          Geç + C &lt; 1: “İptal hakkınız bulunmamaktadır. Dersinize 6 saatten az kaldığı için bu dersi iptal edemezsiniz.”<br>
+          İkisi de yok: “İptal hakkınız ve ders hakkınız bulunmadığı için bu dersi iptal edemezsiniz.”
+        </div>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot ok"></span> Admin onayında</div>
+        <ul class="clean">
+          <li>Kayıt <b>cancelled</b> olur</li>
+          <li><b>Erken + iptal hakkı var (C&gt;0):</b> <span class="badge b-c-down">C −1</span> <span class="badge b-l-up">L +1</span> — ders <b>iade edilir</b> (cezasız iptal)</li>
+          <li><b>Geç (&lt;6 saat) veya iptal hakkı yok:</b> ceza olarak <span class="badge b-l-down">L −1</span> · iptal hakkı <b>korunur</b> (ders iade edilmez)</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot no"></span> Admin reddinde</div>
+        <ul class="clean"><li>Kayıt tekrar <b>active</b> olur · <span class="badge b-none">hiçbir hak değişmez</span></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 APPOINTMENT -->
+  <div class="flow">
+    <div class="head">
+      <div class="num">4</div>
+      <div class="t"><h3>Özel Randevu Talebi</h3>
+        <small>Üye programda olmayan bir saat için birebir randevu ister · origin: appointmentRequest</small></div>
+    </div>
+    <div class="body">
+      <div class="phase">
+        <div class="ph-label"><span class="dot req"></span> Talep anında — gereken koşullar</div>
+        <ul class="clean">
+          <li>Bekleyen başka talep olmamalı</li>
+          <li>Bir saat seçilmiş olmalı · stüdyo o gün açık olmalı · geçmiş saat olmamalı</li>
+          <li>Aynı saat için zaten talep olmamalı</li>
+          <li>En az <b>1 ders hakkı</b> olmalı <span class="pill">L &ge; 1</span> — iptal hakkına bakılmaz</li>
+          <li><b>Hak düşmez</b> — “Randevu Talebi” kaydı <b>pending</b> oluşur</li>
+        </ul>
+        <div class="msg">L &lt; 1: “Ders hakkınız bulunmuyor.” / “Aktif paketiniz bulunmuyor”</div>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot ok"></span> Admin onayında</div>
+        <ul class="clean">
+          <li>Birebir (individual) ders oluşturulur, kayıt <b>active</b> olur</li>
+          <li><span class="badge b-l-down">L −1</span> ders hakkı düşer · iptal hakkı değişmez</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-label"><span class="dot no"></span> Admin reddinde</div>
+        <ul class="clean"><li>Kayıt <b>rejected</b> olur · <span class="badge b-none">hiçbir hak değişmez</span></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 APPOINTMENT MODIFY -->
+  <div class="flow">
+    <div class="head">
+      <div class="num">5</div>
+      <div class="t"><h3>Randevuyla Alınmış Dersin Değiştirilmesi / İptali</h3>
+        <small>Onaylanmış bir randevu dersi artık normal bir aktif ders gibi davranır</small></div>
+    </div>
+    <div class="body">
+      <div class="phase">
+        <div class="ph-label" style="color:var(--burgundy)"><span class="dot ok"></span> Nasıl işler</div>
+        <ul class="clean">
+          <li>Randevu onaylandıktan sonra normal <b>active</b> bir derse dönüşür</li>
+          <li>Değiştirilmesi <b>Akış 2 (Ders Değişikliği)</b> kurallarına tabidir</li>
+          <li>İptal edilmesi <b>Akış 3 (Ders İptali)</b> kurallarına tabidir</li>
+          <li><b>Tek fark:</b> iptal onaylanınca, bu randevu için oluşturulmuş birebir (individual, tekrarsız) ders kaydı da sistemden <b>silinir</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATRIX -->
+  <h2>Özet Matris — Admin Onayında Haklara Etki</h2>
+  <table>
+    <thead>
+      <tr><th>İşlem</th><th>Durum / Koşul</th><th>Ders Hakkı (L)</th><th>İptal Hakkı (C)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="cond">Yeni ders alma</td><td>onay</td><td><span class="badge b-l-down">−1</span></td><td><span class="badge b-none">değişmez</span></td></tr>
+      <tr><td class="cond">Randevu talebi</td><td>onay</td><td><span class="badge b-l-down">−1</span></td><td><span class="badge b-none">değişmez</span></td></tr>
+      <tr><td class="cond" rowspan="2">Ders değişikliği</td><td>geç (&lt;6s)</td><td><span class="badge b-l-down">−1</span></td><td><span class="badge b-none">değişmez</span></td></tr>
+      <tr><td>erken (≥6s)</td><td><span class="badge b-l-down">−1</span> <small>(yalnızca C=0 ise)</small></td><td><span class="badge b-c-down">−1</span> <small>(C&gt;0 ise)</small></td></tr>
+      <tr><td class="cond" rowspan="2">Ders iptali</td><td>erken (&gt;6s) + C&gt;0</td><td><span class="badge b-l-up">+1</span> <small>(iade)</small></td><td><span class="badge b-c-down">−1</span></td></tr>
+      <tr><td>geç (&lt;6s) veya C=0 (ceza)</td><td><span class="badge b-l-down">−1</span></td><td><span class="badge b-none">değişmez</span></td></tr>
+      <tr><td class="cond">Her talep türü</td><td>red</td><td><span class="badge b-none">değişmez</span></td><td><span class="badge b-none">değişmez</span></td></tr>
+    </tbody>
+  </table>
+  <p class="lead" style="margin-top:8px">Not: Talep <b>gönderme</b> anında hiçbir hak düşmez; haklar yalnızca <b>admin onayında</b> güncellenir. Tüm düşüşler 0'ın altına inmeyecek şekilde korumalıdır.</p>
+
+  <!-- KEY RULE -->
+  <div class="warn" style="background:var(--blue-soft);border-color:#bcd6ee;border-left-color:var(--blue)">
+    <h3 style="color:#1f5f9a">🔑 Net Kural: Erken Değişiklikte Önce İptal Hakkı Kullanılır</h3>
+    <p style="margin-bottom:8px"><b>Üye tarafı</b> (talep anında): erken (≥6 saat) değişiklik için yalnızca <b>1 ders hakkı</b> (L ≥ 1) yeterlidir; iptal hakkı şart koşulmaz.</p>
+    <p style="margin-bottom:0"><b>Admin onayında</b> (<code>approveClassChange</code>, KN-2.3): erken değişiklikte hak şu sırayla düşülür — <b>iptal hakkı varsa önce ondan</b> (<span class="badge b-c-down">C −1</span>), iptal hakkı yoksa ders hakkından (<span class="badge b-l-down">L −1</span>). Yani üye L=2, C=1 iken erken değişiklik yaparsa onayda <b>C düşer, L korunur</b>. Bu <b>kasıtlı ve nihai</b> davranıştır: iptal hakkı, üyenin ders hakkını koruyan bir "ücretsiz değişiklik" jetonu gibi çalışır. Geç (&lt;6 saat) değişiklikte ise iptal hakkına bakılmaz, doğrudan <span class="badge b-l-down">L −1</span> uygulanır.</p>
+  </div>
+
+  <footer>
+    And Pilates · Ders &amp; İptal Hakkı İşleyiş Dokümanı<br>
+    Kaynak: <span class="file">MemberCalendarViewModel</span>, <span class="file">MyClassesViewModel</span>,
+    <span class="file">MemberHomeViewModel</span>, <span class="file">RequestManagementViewModel</span>,
+    <span class="file">UserPackage</span>, <span class="file">Reservation</span>
+  </footer>
+
+</div>
+</body>
+</html>
