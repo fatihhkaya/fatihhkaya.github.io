@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gizlilik Politikası — Hidayet</title>
+  <meta name="description" content="Hidayet uygulamasının gizlilik politikası: hangi verileri topladığımız, nasıl kullandığımız ve haklarınız." />
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --accent: #0f766e;
+      --accent-soft: #e6f2f0;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 24px; }
+    header {
+      background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+      color: #fff;
+      padding: 56px 24px 40px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: -0.5px; }
+    header p { margin: 0; opacity: 0.9; font-size: 16px; }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      letter-spacing: 0.3px;
+    }
+    main {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 8px 28px 28px;
+      margin-top: -24px;
+      box-shadow: 0 8px 30px rgba(15,118,110,0.08);
+    }
+    h2 {
+      font-size: 21px;
+      margin-top: 34px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      color: var(--accent);
+    }
+    h2:first-of-type { border-top: none; }
+    h3 { font-size: 17px; margin: 22px 0 6px; }
+    p, li { color: var(--ink); }
+    .muted { color: var(--muted); font-size: 14px; }
+    ul { padding-left: 22px; }
+    li { margin: 6px 0; }
+    a { color: var(--accent); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th { background: var(--accent-soft); color: var(--accent); }
+    .callout {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 18px 0;
+      font-size: 15px;
+    }
+    footer {
+      text-align: center;
+      padding: 28px 24px 48px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    footer a { margin: 0 8px; }
+    code { background: #f1f5f4; padding: 1px 6px; border-radius: 5px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge">Hidayet</div>
+    <h1>Gizlilik Politikası</h1>
+    <p>Son güncelleme: 20 Haziran 2026</p>
+  </header>
+
+  <div class="wrap">
+    <main>
+      <p>
+        Bu gizlilik politikası, <strong>Hidayet</strong> mobil uygulamasını
+        ("Uygulama") kullandığınızda kişisel verilerinizi nasıl topladığımızı,
+        kullandığımızı ve koruduğumuzu açıklar. Uygulamayı kullanarak bu
+        politikada açıklanan uygulamaları kabul etmiş olursunuz.
+      </p>
+
+      <div class="callout">
+        <strong>Özet:</strong> Hidayet reklam göstermez, verilerinizi satmaz ve
+        üçüncü taraf reklam/analiz takip araçları kullanmaz. Verilerinizi yalnızca
+        uygulamanın çalışması ve hesabınızın senkronizasyonu için işleriz.
+      </div>
+
+      <h2>1. Topladığımız Veriler</h2>
+
+      <h3>a) Hesap Bilgileri</h3>
+      <p>
+        Bir hesap oluşturduğunuzda aşağıdaki bilgileri toplarız:
+      </p>
+      <ul>
+        <li><strong>E-posta adresi</strong> — giriş ve hesap kurtarma için</li>
+        <li><strong>Kullanıcı adı</strong> — profilinizi tanımlamak için</li>
+        <li><strong>Şifre</strong> — kimlik doğrulama sağlayıcımız (Supabase) tarafından şifrelenmiş (hash'lenmiş) olarak saklanır; düz metin şifreye erişimimiz yoktur</li>
+      </ul>
+
+      <h3>b) Uygulama İçi Etkinlik Verileri</h3>
+      <p>Hesabınıza bağlı olarak, cihazlarınız arasında senkronize edilmek üzere:</p>
+      <ul>
+        <li><strong>Favoriler</strong> — kaydettiğiniz ayet ve hadisler ile eklediğiniz kişisel notlar</li>
+        <li><strong>İlerleme istatistikleri</strong> — okunan ayet sayısı, toplam puan, güncel ve en uzun seri (streak), son aktiflik tarihi</li>
+        <li><strong>Üyelik durumu</strong> — Hidayet Pro aboneliğinizin aktif olup olmadığı ve geçerlilik tarihi</li>
+      </ul>
+
+      <h3>c) Satın Alma Verileri</h3>
+      <p>
+        Hidayet Pro satın aldığınızda, işlem doğrudan <strong>Apple App Store</strong>
+        veya <strong>Google Play</strong> üzerinden gerçekleşir. Ödeme bilgilerinize
+        (kart numarası vb.) erişimimiz <em>yoktur</em>. Abonelik durumunu doğrulamak
+        için satın alma makbuzu ve anonim bir kullanıcı kimliği, satın alma altyapı
+        sağlayıcımız <strong>RevenueCat</strong> aracılığıyla işlenir.
+      </p>
+
+      <h3>d) Bildirimler</h3>
+      <p>
+        Günlük hatırlatmalara izin verirseniz, bildirim gönderebilmek için cihazınıza
+        ait bir bildirim jetonu (push token) işlenir. Bildirimleri cihaz ayarlarından
+        veya uygulama içinden istediğiniz zaman kapatabilirsiniz.
+      </p>
+
+      <h3>e) Otomatik Toplanmayan Veriler</h3>
+      <p>Hidayet <strong>konum verisi</strong>, rehber, fotoğraf veya cihaz tanımlayıcılarını reklam amacıyla <strong>toplamaz</strong>. Reklam ağı veya üçüncü taraf analiz SDK'sı kullanmayız.</p>
+
+      <h2>2. Verileri Kimlerle Paylaşıyoruz</h2>
+      <p>
+        Verilerinizi satmıyoruz. Uygulamanın çalışması için yalnızca aşağıdaki
+        hizmet sağlayıcılarla, yalnızca gerekli ölçüde paylaşıyoruz:
+      </p>
+      <table>
+        <tr><th>Sağlayıcı</th><th>Amaç</th><th>Gizlilik politikası</th></tr>
+        <tr>
+          <td>Supabase</td>
+          <td>Kimlik doğrulama, hesap ve uygulama verilerinin barındırılması</td>
+          <td><a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a></td>
+        </tr>
+        <tr>
+          <td>RevenueCat</td>
+          <td>Abonelik / satın alma yönetimi ve doğrulaması</td>
+          <td><a href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener">revenuecat.com/privacy</a></td>
+        </tr>
+        <tr>
+          <td>Apple / Google</td>
+          <td>Uygulama dağıtımı, ödeme ve bildirim altyapısı</td>
+          <td><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">apple.com/legal/privacy</a></td>
+        </tr>
+      </table>
+      <p class="muted">
+        Ayrıca yasal bir yükümlülüğümüz olduğunda (mahkeme kararı vb.) verileri
+        ilgili mercilerle paylaşmamız gerekebilir.
+      </p>
+
+      <h2>3. Verilerinizi Nasıl Kullanıyoruz</h2>
+      <ul>
+        <li>Hesabınızı oluşturmak ve oturumunuzu güvenli tutmak</li>
+        <li>Favorilerinizi ve ilerlemenizi cihazlarınız arasında senkronize etmek</li>
+        <li>Hidayet Pro üyeliğinizi etkinleştirmek ve doğrulamak</li>
+        <li>İzin verdiyseniz günlük hatırlatma bildirimleri göndermek</li>
+        <li>Uygulamayı çalışır durumda tutmak, hataları gidermek ve geliştirmek</li>
+      </ul>
+
+      <h2>4. Veri Saklama</h2>
+      <p>
+        Verilerinizi hesabınız aktif olduğu sürece saklarız. Hesabınızı sildiğinizde,
+        hesabınıza bağlı kişisel veriler (favoriler, istatistikler, profil) makul bir
+        süre içinde sistemlerimizden kalıcı olarak silinir. Cihazınızda yerel olarak
+        saklanan veriler (önbellek, oturum) uygulamayı kaldırdığınızda silinir.
+      </p>
+
+      <h2>5. Haklarınız</h2>
+      <p>KVKK ve GDPR kapsamında aşağıdaki haklara sahipsiniz:</p>
+      <ul>
+        <li>Verilerinize erişme ve kopyasını talep etme</li>
+        <li>Yanlış verilerin düzeltilmesini isteme</li>
+        <li>Hesabınızın ve verilerinizin silinmesini talep etme</li>
+        <li>Veri işlemeye itiraz etme veya rızanızı geri çekme</li>
+      </ul>
+      <p>
+        Bu hakları kullanmak için uygulama içindeki <strong>Ayarlar</strong> bölümünden
+        hesabınızı silebilir veya aşağıdaki e-posta adresinden bizimle iletişime geçebilirsiniz.
+      </p>
+
+      <h2>6. Çocukların Gizliliği</h2>
+      <p>
+        Hidayet 13 yaşın altındaki çocuklara yönelik değildir ve bilerek bu yaş
+        grubundan kişisel veri toplamayız. Bir çocuğa ait veri topladığımızı fark
+        edersek, söz konusu veriyi sileriz.
+      </p>
+
+      <h2>7. Veri Güvenliği</h2>
+      <p>
+        Verileriniz aktarım sırasında şifrelenir (HTTPS/TLS) ve erişim, satır
+        düzeyinde güvenlik (Row Level Security) ile yalnızca hesap sahibine
+        kısıtlanır. Hiçbir sistem %100 güvenli olmasa da verilerinizi korumak için
+        sektör standardı önlemler alırız.
+      </p>
+
+      <h2>8. Bu Politikadaki Değişiklikler</h2>
+      <p>
+        Bu gizlilik politikasını zaman zaman güncelleyebiliriz. Önemli değişiklikleri
+        bu sayfada yayınlar ve üstteki "Son güncelleme" tarihini değiştiririz.
+      </p>
+
+      <h2>9. İletişim</h2>
+      <p>
+        Gizlilikle ilgili sorularınız için bize ulaşın:<br />
+        <strong>E-posta:</strong> <a href="mailto:destek@hidayetapp.com">destek@hidayetapp.com</a>
+      </p>
+      <p class="muted">
+        Uygulama: Hidayet (<code>com.selimcicek.hidayet</code>)
+      </p>
+    </main>
+
+    <footer>
+      <a href="privacy.html">Gizlilik Politikası</a> ·
+      <a href="terms.html">Kullanım Koşulları</a> ·
+      <a href="refund.html">İade Politikası</a>
+      <p>© 2026 Hidayet. Tüm hakları saklıdır.</p>
+    </footer>
+  </div>
+</body>
+</html>
