@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlimden Hikmete — Proje Sunumu</title>
+<style>
+  :root{
+    --mor:#7C3AED; --mor-koyu:#5B21B6; --mor-acik:#A78BFA; --mor-soluk:#EDE9FE;
+    --yesil:#4ADE80; --turuncu:#FF9800; --kirmizi:#E11D48;
+    --bg:#0F0A1E; --kart:#1A1530; --kart2:#241B3D;
+    --metin:#F5F3FF; --metin-soluk:#B8AED6; --cizgi:rgba(167,139,250,.18);
+    --golge:0 20px 50px -20px rgba(124,58,237,.55);
+    --r:22px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); color:var(--metin); line-height:1.6;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(900px 600px at 10% -5%,rgba(124,58,237,.35),transparent 60%),
+      radial-gradient(700px 500px at 95% 10%,rgba(74,222,128,.12),transparent 55%);
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  section{padding:84px 0}
+  .etiket{display:inline-block;font-size:13px;font-weight:700;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--mor-acik);
+    background:rgba(124,58,237,.15);border:1px solid var(--cizgi);
+    padding:7px 16px;border-radius:100px;margin-bottom:18px}
+  h1{font-size:clamp(34px,7vw,64px);font-weight:800;line-height:1.08;letter-spacing:-1.5px}
+  h2{font-size:clamp(27px,4.5vw,42px);font-weight:800;letter-spacing:-1px;margin-bottom:14px}
+  h2 .em{background:linear-gradient(120deg,var(--mor-acik),var(--yesil));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .alt{color:var(--metin-soluk);font-size:clamp(15px,2vw,18px);max-width:680px}
+
+  /* HERO */
+  header.hero{min-height:92vh;display:flex;align-items:center;
+    border-bottom:1px solid var(--cizgi);position:relative}
+  .logo-row{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+  .logo-badge{width:54px;height:54px;border-radius:16px;
+    background:linear-gradient(135deg,var(--mor),var(--mor-koyu));
+    display:grid;place-items:center;font-size:26px;box-shadow:var(--golge)}
+  .logo-row b{font-size:19px;letter-spacing:.5px}
+  .hero h1 .g{background:linear-gradient(120deg,#fff,var(--mor-acik) 60%,var(--yesil));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .alt{margin-top:22px;font-size:clamp(16px,2.2vw,20px)}
+  .rozet-sira{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+  .rozet{background:var(--kart);border:1px solid var(--cizgi);border-radius:100px;
+    padding:11px 20px;font-size:14px;font-weight:600;color:var(--metin-soluk)}
+  .rozet b{color:var(--metin)}
+
+  /* GENEL KART */
+  .kartlar{display:grid;gap:18px}
+  @media(min-width:760px){.kartlar.k3{grid-template-columns:repeat(3,1fr)}
+    .kartlar.k2{grid-template-columns:repeat(2,1fr)}}
+  .kart{background:var(--kart);border:1px solid var(--cizgi);border-radius:var(--r);
+    padding:26px;transition:.3s}
+  .kart:hover{transform:translateY(-4px);border-color:var(--mor-acik);box-shadow:var(--golge)}
+  .kart .ikon{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;
+    font-size:24px;margin-bottom:16px;background:rgba(124,58,237,.18)}
+  .kart h3{font-size:19px;margin-bottom:7px}
+  .kart p{color:var(--metin-soluk);font-size:14.5px}
+
+  /* GALERİ — YATAY KAYDIRMA */
+  .galeri-bilgi{display:flex;align-items:center;gap:8px;color:var(--mor-acik);
+    font-size:14px;font-weight:600;margin-bottom:18px}
+  .galeri{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;
+    padding:6px 22px 26px;margin:0 -22px;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:var(--mor) transparent}
+  .galeri::-webkit-scrollbar{height:8px}
+  .galeri::-webkit-scrollbar-thumb{background:var(--mor);border-radius:100px}
+  .galeri::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
+  .shot{flex:0 0 auto;width:230px;scroll-snap-align:center;text-align:center}
+  .shot img{width:100%;border-radius:26px;border:1px solid var(--cizgi);
+    box-shadow:var(--golge);background:var(--kart);display:block}
+  .shot span{display:block;margin-top:12px;font-size:13.5px;color:var(--metin-soluk);font-weight:600}
+  .shot span b{display:block;color:var(--metin);font-size:14.5px}
+
+  /* YOL HARİTASI */
+  .yol{position:relative;margin-top:20px}
+  .yol::before{content:"";position:absolute;left:23px;top:8px;bottom:8px;width:2px;
+    background:linear-gradient(var(--mor),var(--yesil))}
+  @media(min-width:760px){.yol::before{left:50%}}
+  .faz{position:relative;padding-left:62px;margin-bottom:30px}
+  @media(min-width:760px){
+    .faz{width:50%;padding:0 40px;margin-bottom:38px}
+    .faz:nth-child(odd){left:0;text-align:right}
+    .faz:nth-child(even){left:50%}
+  }
+  .faz .nokta{position:absolute;left:14px;top:4px;width:20px;height:20px;border-radius:50%;
+    background:var(--mor);border:4px solid var(--bg);box-shadow:0 0 0 3px var(--mor-acik)}
+  @media(min-width:760px){
+    .faz:nth-child(odd) .nokta{left:auto;right:-10px}
+    .faz:nth-child(even) .nokta{left:-10px}
+  }
+  .faz .ic{background:var(--kart);border:1px solid var(--cizgi);border-radius:var(--r);padding:22px}
+  .faz .sure{font-size:12.5px;font-weight:700;color:var(--yesil);letter-spacing:.5px}
+  .faz h3{font-size:19px;margin:6px 0 8px}
+  .faz p{font-size:14px;color:var(--metin-soluk)}
+
+  /* AKORDİYON */
+  .akordiyon{margin-top:24px;display:grid;gap:14px}
+  details{background:var(--kart);border:1px solid var(--cizgi);border-radius:18px;
+    overflow:hidden;transition:.3s}
+  details[open]{border-color:var(--mor-acik);box-shadow:var(--golge)}
+  summary{cursor:pointer;list-style:none;padding:20px 24px;display:flex;align-items:center;
+    gap:14px;font-weight:700;font-size:17px;user-select:none}
+  summary::-webkit-details-marker{display:none}
+  summary .em{width:40px;height:40px;border-radius:11px;background:rgba(124,58,237,.2);
+    display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+  summary .ok{margin-left:auto;color:var(--mor-acik);font-size:22px;transition:.3s;font-weight:400}
+  details[open] summary .ok{transform:rotate(45deg)}
+  .govde{padding:0 24px 22px 78px}
+  .govde li{list-style:none;padding:9px 0;border-top:1px solid var(--cizgi);
+    color:var(--metin-soluk);font-size:14.5px;display:flex;gap:10px}
+  .govde li::before{content:"✓";color:var(--yesil);font-weight:800;flex:0 0 auto}
+  .govde li b{color:var(--metin);font-weight:600}
+  @media(max-width:560px){.govde{padding-left:24px}}
+
+  /* SÜREÇ ADIMLARI */
+  .surec{counter-reset:s;display:grid;gap:16px;margin-top:24px}
+  .adim{background:var(--kart);border:1px solid var(--cizgi);border-radius:18px;
+    padding:24px 26px 24px 78px;position:relative}
+  .adim::before{counter-increment:s;content:counter(s);position:absolute;left:22px;top:22px;
+    width:38px;height:38px;border-radius:11px;
+    background:linear-gradient(135deg,var(--mor),var(--mor-koyu));
+    display:grid;place-items:center;font-weight:800;font-size:17px}
+  .adim h3{font-size:18px;margin-bottom:5px}
+  .adim p{color:var(--metin-soluk);font-size:14.5px}
+
+  /* DESTEK */
+  .destek-tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 11px;
+    border-radius:8px;margin-bottom:12px}
+  .t-yesil{background:rgba(74,222,128,.16);color:var(--yesil)}
+  .t-turuncu{background:rgba(255,152,0,.16);color:var(--turuncu)}
+  .t-mor{background:rgba(124,58,237,.2);color:var(--mor-acik)}
+
+  /* İSTEK DEĞERLENDİRME TABLOSU */
+  .tablo{margin-top:24px;border:1px solid var(--cizgi);border-radius:18px;overflow:hidden;
+    background:var(--kart)}
+  .tr{display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:0;border-top:1px solid var(--cizgi)}
+  .tr:first-child{border-top:none;background:rgba(124,58,237,.16);font-weight:700}
+  .tr>div{padding:15px 18px;font-size:14px;border-left:1px solid var(--cizgi)}
+  .tr>div:first-child{border-left:none;font-weight:700}
+  .tr p{color:var(--metin-soluk)}
+  @media(max-width:620px){
+    .tr{grid-template-columns:1fr}
+    .tr>div{border-left:none;border-top:1px solid var(--cizgi)}
+    .tr:first-child{display:none}
+    .tr>div::before{content:attr(data-l);display:block;font-size:11px;
+      text-transform:uppercase;color:var(--mor-acik);letter-spacing:.5px;margin-bottom:3px}
+  }
+
+  footer{border-top:1px solid var(--cizgi);padding:48px 0;text-align:center;color:var(--metin-soluk)}
+  footer b{color:var(--metin)}
+  .cta{display:inline-block;margin-top:8px;background:linear-gradient(135deg,var(--mor),var(--mor-koyu));
+    color:#fff;padding:14px 30px;border-radius:100px;font-weight:700;text-decoration:none;
+    box-shadow:var(--golge)}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="logo-row">
+      <div class="logo-badge">⚡</div>
+      <b>İlimden Hikmete</b>
+    </div>
+    <span class="etiket">Mobil Uygulama · Proje Sunumu</span>
+    <h1><span class="g">İslami bilgi yarışması</span><br>uygulaması — yapımdan<br>yayına, baştan sona.</h1>
+    <p class="alt">Kategori bazlı sorular, gerçek zamanlı rakip eşleşmesi, ligler, başarımlar ve tam donanımlı bir yönetim paneli. Bu sunumda uygulamanın <b style="color:#fff">yol haritasını</b>, <b style="color:#fff">tüm özelliklerini</b>, <b style="color:#fff">yayına çıkış sürecini</b> ve <b style="color:#fff">yayın sonrası destek modelini</b> bulacaksınız.</p>
+    <div class="rozet-sira">
+      <div class="rozet">📱 <b>20</b> ekran tasarlandı</div>
+      <div class="rozet">🌓 Açık + Koyu tema</div>
+      <div class="rozet">🛠️ Yönetim paneli dahil</div>
+      <div class="rozet">🇹🇷 Türkçe + İngilizce</div>
+    </div>
+  </div>
+</header>
+
+<!-- GALERİ -->
+<section>
+  <div class="wrap">
+    <span class="etiket">Uygulamadan kareler</span>
+    <h2>Tasarlanan <span class="em">ekranlar</span></h2>
+    <p class="alt">Aşağıdaki ekranlar gerçek uygulamadan alınmıştır.</p>
+    <div class="galeri-bilgi">👉 Yana doğru kaydırarak tüm ekranları gezebilirsiniz</div>
+  </div>
+  <div class="galeri">
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.47.19.png" alt="Onboarding"><span><b>Karşılama</b>Onboarding</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.47.35.png" alt="Giriş"><span><b>Giriş / Kayıt</b>Google · Apple · E-posta</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.47.44.png" alt="Ana Sayfa"><span><b>Ana Sayfa</b>Puan · seri · kategoriler</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.47.55.png" alt="Ligler"><span><b>Ligler</b>Sıralama</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.07.png" alt="Kategori"><span><b>Kategori Seçimi</b>Hadis · Sahabe · Tefsir</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.10.png" alt="Zorluk"><span><b>Zorluk Seçimi</b>Kolay · Orta · Zor</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.15.png" alt="Oyun Modu"><span><b>Oyun Modu</b>Solo · Çoklu</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.20.png" alt="Eşleşme"><span><b>Rakip Eşleşmesi</b>Matchmaking</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.34.png" alt="Oyun"><span><b>Oyun Ekranı</b>Süreli sorular</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.41.png" alt="Doğru cevap"><span><b>Anlık Geri Bildirim</b>Doğru / yanlış</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.49.png" alt="Soru geçişi"><span><b>Soru Akışı</b>10 soruluk tur</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.48.55.png" alt="Reveal"><span><b>Cevap Açığa Çıkışı</b>Renkli vurgular</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.49.13.png" alt="Sonuç"><span><b>Sonuç</b>Kazandın! özeti</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.49.29.png" alt="Profil"><span><b>Profil</b>Kısayollar</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.49.42.png" alt="Admin"><span><b>Yönetim Paneli</b>Dashboard</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.49.49.png" alt="Analiz"><span><b>Analizler</b>Katılım grafikleri</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.49.56.png" alt="Kategori yönetimi"><span><b>Kategori Yönetimi</b>Aç/kapat · düzenle</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.50.08.png" alt="Soru yönetimi"><span><b>Soru Yönetimi</b>Havuz · moderasyon</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.50.13.png" alt="Başarım"><span><b>Başarım Yönetimi</b>Rozet oluştur</span></div>
+    <div class="shot"><img src="assets/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-06-30%20at%2016.50.38.png" alt="Ayarlar"><span><b>Ayarlar</b>Koyu tema · bildirim</span></div>
+  </div>
+</section>
+
+<!-- YOL HARİTASI -->
+<section style="background:rgba(255,255,255,.02)">
+  <div class="wrap">
+    <span class="etiket">Yapım Aşaması</span>
+    <h2>Geliştirme <span class="em">yol haritası</span></h2>
+    <p class="alt">Proje, net teslimat çıktıları olan altı fazda ilerler. Her faz sonunda size çalışan bir önizleme sunulur ve onayınız alınır.</p>
+    <div class="yol">
+      <div class="faz"><div class="nokta"></div><div class="ic">
+        <div class="sure">FAZ 1 · 1. HAFTA</div>
+        <h3>Keşif & Planlama</h3>
+        <p>Gereksinim toplama, içerik (soru havuzu) yapısı, marka ve renk yönü, ekran listesinin netleştirilmesi.</p></div></div>
+      <div class="faz"><div class="nokta"></div><div class="ic">
+        <div class="sure">FAZ 2 · 2.–3. HAFTA</div>
+        <h3>UI/UX Tasarım</h3>
+        <p>Tüm ekranların açık + koyu tema tasarımı, tasarım sistemi ve tıklanabilir prototip.</p></div></div>
+      <div class="faz"><div class="nokta"></div><div class="ic">
+        <div class="sure">FAZ 3 · 4.–6. HAFTA</div>
+        <h3>Uygulama Geliştirme</h3>
+        <p>Flutter ile ekranların kodlanması, oyun mantığı, eşleşme akışı, animasyonlar ve durum yönetimi.</p></div></div>
+      <div class="faz"><div class="nokta"></div><div class="ic">
+        <div class="sure">FAZ 4 · 7. HAFTA</div>
+        <h3>Backend & Yönetim Paneli</h3>
+        <p>Kullanıcı/oturum, soru havuzu, kategori ve başarım yönetimi; canlı veri ve admin paneli entegrasyonu.</p></div></div>
+      <div class="faz"><div class="nokta"></div><div class="ic">
+        <div class="sure">FAZ 5 · 8. HAFTA</div>
+        <h3>Test & Kalite</h3>
+        <p>Cihaz testleri, hata ayıklama, performans, güvenlik ve içerik son kontrolü; beta geri bildirim turu.</p></div></div>
+      <div class="faz"><div class="nokta"></div><div class="ic">
+        <div class="sure">FAZ 6 · 9. HAFTA</div>
+        <h3>Yayına Çıkış</h3>
+        <p>App Store & Google Play mağaza kayıtları, görseller, açıklama metinleri ve canlı yayın.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ÖZELLİKLER (AKORDİYON) -->
+<section>
+  <div class="wrap">
+    <span class="etiket">Kapsam</span>
+    <h2>Uygulamadaki <span class="em">tüm özellikler</span></h2>
+    <p class="alt">Başlıklara dokunarak her bölümün içeriğini açıp inceleyebilirsiniz.</p>
+    <div class="akordiyon">
+
+      <details open><summary><span class="em">🚪</span> Giriş & Hesap <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li><b>Karşılama (onboarding)</b> — ilk kullanımda tanıtım akışı</li>
+          <li><b>Google, Apple ve e-posta</b> ile giriş / kayıt</li>
+          <li>Türkçe / İngilizce <b>dil seçimi</b></li>
+          <li>Şifre sıfırlama ve davet kodu ile katılım</li>
+        </ul>
+      </details>
+
+      <details><summary><span class="em">🎮</span> Oyun & Yarışma <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li><b>Solo</b> ve <b>çok oyunculu</b> (1v1) yarışma modları</li>
+          <li>Gerçek zamanlı <b>rakip eşleşmesi</b> (matchmaking)</li>
+          <li><b>Kategori seçimi</b> — Hadis, Sahabe, Tefsir, İslam Tarihi, Ahlak ve daha fazlası</li>
+          <li><b>Zorluk seviyeleri</b> — Kolay (+50), Orta (+75), Zor (+100)</li>
+          <li>Geri sayım sayacı ve süreye bağlı puanlama</li>
+          <li>Anlık <b>doğru/yanlış geri bildirimi</b> ve cevap açığa çıkışı</li>
+        </ul>
+      </details>
+
+      <details><summary><span class="em">🏆</span> Sonuç & İlerleme <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li>Maç sonu <b>kazandın/kaybettin özeti</b>, isabet yüzdesi</li>
+          <li><b>Soru bazlı detay</b> ve doğru sayısı</li>
+          <li>Toplam puan, oynanan maç ve <b>günlük seri</b> takibi</li>
+        </ul>
+      </details>
+
+      <details><summary><span class="em">🥇</span> Ligler & Sıralama <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li>Haftalık <b>lig sıralaması</b> ve liderlik tablosu</li>
+          <li>Kullanıcının kendi sırasını öne çıkarma</li>
+          <li>Rakiplerle puan karşılaştırması</li>
+        </ul>
+      </details>
+
+      <details><summary><span class="em">🎖️</span> Başarımlar & Rozetler <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li><b>İlk Galibiyet, Ateşli Seri, Hadis Ustası, Hızlı Cevap</b> gibi rozetler</li>
+          <li>Her başarımda <b>ilerleme çubuğu</b></li>
+          <li>Hedeflere ulaşıldıkça otomatik açılma</li>
+        </ul>
+      </details>
+
+      <details><summary><span class="em">👤</span> Profil & Sosyal <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li>Profil özeti — maç, galibiyet, seri</li>
+          <li>Kısayollar: İstatistik, Başarımlar, Sıralama</li>
+          <li><b>Arkadaş davet et</b> — davet kodu paylaşımı</li>
+        </ul>
+      </details>
+
+      <details><summary><span class="em">⚙️</span> Ayarlar & Bildirim <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li><b>Açık / Koyu / Sistem</b> tema seçimi</li>
+          <li>Ses efektleri ve <b>titreşim (haptik)</b> kontrolü</li>
+          <li><b>Push bildirimleri</b> — davet ve turnuva hatırlatmaları</li>
+          <li>Bildirim merkezi ve hesap yönetimi</li>
+        </ul>
+      </details>
+
+      <details><summary><span class="em">🛠️</span> Yönetim Paneli (Admin) <span class="ok">+</span></summary>
+        <ul class="govde">
+          <li><b>Dashboard</b> — toplam kullanıcı, soru, günlük maç ve canlı oyuncu</li>
+          <li>Kategori bazlı katılım grafikleri ve <b>son aktivite logları</b></li>
+          <li><b>Kategori yönetimi</b> — ekleme, sıralama, aç/kapat</li>
+          <li><b>Soru yönetimi</b> — havuz düzenleme, filtreleme, yayın kontrolü, moderasyon</li>
+          <li><b>Başarım yönetimi</b> — yeni rozet oluşturma ve düzenleme</li>
+        </ul>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- YAYINLANMA SÜRECİ -->
+<section style="background:rgba(255,255,255,.02)">
+  <div class="wrap">
+    <span class="etiket">Müşteri Süreci</span>
+    <h2>Yapımdan <span class="em">yayına</span> nasıl ilerliyoruz?</h2>
+    <p class="alt">Tüm süreç şeffaf adımlarla yürür; her aşamada onayınız alınır ve düzenli olarak bilgilendirilirsiniz.</p>
+    <div class="surec">
+      <div class="adim"><h3>Sözleşme & Başlangıç</h3><p>Kapsam, takvim ve teslimatların netleştirilmesi; proje başlangıç toplantısı.</p></div>
+      <div class="adim"><h3>Tasarım Onayı</h3><p>Ekran tasarımları ve prototip sunulur; geri bildirimlerinizle revize edilip onaylanır.</p></div>
+      <div class="adim"><h3>Geliştirme & Ara Önizlemeler</h3><p>Her faz sonunda çalışan sürümü test etmeniz için size ulaştırırız.</p></div>
+      <div class="adim"><h3>İçerik Yüklemesi</h3><p>Soru havuzu, kategoriler ve başarımlar yönetim paneli üzerinden hazırlanır.</p></div>
+      <div class="adim"><h3>Test & Beta</h3><p>Gerçek cihazlarda test, hata düzeltme ve sınırlı beta kullanıcı denemesi.</p></div>
+      <div class="adim"><h3>Mağaza Yayını</h3><p>App Store ve Google Play hesap kurulumu, mağaza görselleri ve uygulamanın canlıya alınması.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- YAYIN SONRASI DESTEK -->
+<section>
+  <div class="wrap">
+    <span class="etiket">Yayın Sonrası</span>
+    <h2>Destek <span class="em">süreci</span></h2>
+    <p class="alt">Yayın bitiş değil, başlangıçtır. Uygulamanız canlıya alındıktan sonra da yanınızdayız.</p>
+    <div class="kartlar k3" style="margin-top:24px">
+      <div class="kart">
+        <span class="destek-tag t-yesil">DAHİL · ÜCRETSİZ</span>
+        <div class="ikon">🛡️</div>
+        <h3>Garanti Dönemi</h3>
+        <p>Teslimden sonraki ilk dönemde, mevcut özelliklerde çıkan hatalar ücretsiz giderilir.</p>
+      </div>
+      <div class="kart">
+        <span class="destek-tag t-mor">BAKIM</span>
+        <div class="ikon">🔄</div>
+        <h3>Güncel Tutma</h3>
+        <p>iOS / Android sürüm uyumu, kütüphane güncellemeleri ve mağaza politikası takibi.</p>
+      </div>
+      <div class="kart">
+        <span class="destek-tag t-turuncu">İZLEME</span>
+        <div class="ikon">📊</div>
+        <h3>İzleme & Raporlama</h3>
+        <p>Çökme raporları, performans takibi ve düzenli durum bilgilendirmesi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EKSTRA İSTEKLER -->
+<section style="background:rgba(255,255,255,.02)">
+  <div class="wrap">
+    <span class="etiket">Geliştirme Talepleri</span>
+    <h2>Olası <span class="em">ekstra istekler</span> nasıl değerlendirilir?</h2>
+    <p class="alt">Yayından sonra gelecek yeni özellik veya değişiklik talepleri şeffaf bir akışla ele alınır:</p>
+    <div class="surec" style="margin-top:24px">
+      <div class="adim"><h3>Talebin İletilmesi</h3><p>Yeni isteğinizi yazılı olarak iletirsiniz; net olması için kısa bir görüşme yapılır.</p></div>
+      <div class="adim"><h3>Kapsam & Etki Analizi</h3><p>İsteğin mevcut yapıya etkisi, süresi ve teknik gereksinimi değerlendirilir.</p></div>
+      <div class="adim"><h3>Teklif & Onay</h3><p>Süre ve bütçe içeren net bir teklif sunulur; onayınızla işe alınır.</p></div>
+      <div class="adim"><h3>Geliştirme & Teslim</h3><p>Yeni özellik geliştirilir, test edilir ve güncelleme olarak yayına alınır.</p></div>
+    </div>
+
+    <div class="tablo">
+      <div class="tr"><div>Talep Türü</div><div>Örnek</div><div>Yaklaşım</div></div>
+      <div class="tr">
+        <div data-l="Talep Türü">Küçük düzeltme</div>
+        <div data-l="Örnek"><p>Yazım hatası, renk/metin değişikliği, küçük ayar</p></div>
+        <div data-l="Yaklaşım"><p>Garanti/bakım kapsamında hızlı çözülür</p></div>
+      </div>
+      <div class="tr">
+        <div data-l="Talep Türü">İçerik güncellemesi</div>
+        <div data-l="Örnek"><p>Yeni soru, kategori veya başarım eklenmesi</p></div>
+        <div data-l="Yaklaşım"><p>Yönetim panelinden kendiniz yapabilirsiniz</p></div>
+      </div>
+      <div class="tr">
+        <div data-l="Talep Türü">Yeni özellik</div>
+        <div data-l="Örnek"><p>Turnuva modu, ödüllü reklam, yeni oyun tipi</p></div>
+        <div data-l="Yaklaşım"><p>Ayrı teklif + takvim ile planlanır</p></div>
+      </div>
+      <div class="tr">
+        <div data-l="Talep Türü">Büyük geliştirme</div>
+        <div data-l="Örnek"><p>Yeni platform, kapsamlı yeniden tasarım</p></div>
+        <div data-l="Yaklaşım"><p>Yeni faz / proje olarak ele alınır</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p style="font-size:18px"><b>İlimden Hikmete</b> — bilgi yarışması uygulaması</p>
+    <p style="margin-top:6px">Yol haritası · Özellikler · Yayın · Destek — baştan sona şeffaf süreç.</p>
+    <a class="cta" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Başa dön</a>
+  </div>
+</footer>
+
+</body>
+</html>
